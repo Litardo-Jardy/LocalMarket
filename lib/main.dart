@@ -1,145 +1,65 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:local_market/View/login.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const FirtsScreen());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class FirtsScreen extends StatelessWidget {
+  const FirtsScreen({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 6, 3, 10)),
-        useMaterial3: true,
+        primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Local Market'),
+      home: const SplashScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final TextEditingController _user = TextEditingController();
-  final TextEditingController _pass = TextEditingController();
-
-  void _userLatestValue() {
-    final value = _user.text;
-    debugPrint(value);
-  }
-
-  void _passLatestValue() {
-    final value = _pass.text;
-    debugPrint(value);
-  }
+class _SplashScreenState extends State<SplashScreen> {
+  final bool _isLogged = false;
 
   @override
   void initState() {
     super.initState();
-    _user.addListener(_userLatestValue);
-    _pass.addListener(_passLatestValue);
+    _navigateToLogin();
   }
 
-  @override
-  void dispose() {
-    _user.dispose();
-    super.dispose();
+  _navigateToLogin() async {
+    await Future.delayed(const Duration(seconds: 9), () {});
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => _isLogged ? const Loggin() : const Loggin()),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //Diseño de la parte superior "AppBar"
-      appBar: AppBar(
-        toolbarHeight: 140.0,
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Row(
-          children: [
-            const Icon(
-              Icons.my_location, // Icono que deseas mostrar
-              color: Color.fromARGB(255, 95, 131, 161),
-              size: 75.0,
-            ),
-            const SizedBox(width: 8.0),
-            Container(
-              alignment: Alignment.bottomLeft,
-              margin: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Text(
-                widget.title,
-                style: const TextStyle(
-                  color: Color.fromARGB(255, 3, 0, 0),
-                  fontSize: 35.0,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                  letterSpacing: 2,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return const Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 370,
-              child: Column(
-                children: [
-                  Container(
-                    alignment: Alignment.bottomLeft,
-                    child: const Text(
-                      'Usuario:',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 3, 0, 0),
-                        fontSize: 27.0,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.normal,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 17.0),
-                  TextField(
-                    controller: _user,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Ingrese su usuario',
-                    ),
-                  ),
-                  const SizedBox(height: 30.0),
-                  Container(
-                    alignment: Alignment.bottomLeft,
-                    child: const Text(
-                      'Contraseña:',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 3, 0, 0),
-                        fontSize: 27.0,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.normal,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 17.0),
-                  TextField(
-                    controller: _pass,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Ingrese su contraseña',
-                    ),
-                  ),
-                ],
-              ),
+            Icon(Icons.location_on, size: 100, color: Colors.blue),
+            SizedBox(height: 20),
+            Text(
+              'Iniciar la App',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ],
         ),
