@@ -7,20 +7,18 @@ void main() {
 class Loggin extends StatelessWidget {
   const Loggin({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 6, 3, 10),
+          seedColor: const Color(0xFF4CAF50), // Semilla de color verde vibrante
         ),
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Local Market'),
-      debugShowCheckedModeBanner:
-          false, // Eliminar la marca de verificación de depuración
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -57,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void dispose() {
     _user.dispose();
-    _pass.dispose(); // Asegúrate de disponer del controlador _pass también
+    _pass.dispose();
     super.dispose();
   }
 
@@ -66,13 +64,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 170.0,
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: const Color(0xFFF2F2F2), // Fondo gris claro
         title: Row(
           children: [
             const SizedBox(height: 20.0),
             const Icon(
-              Icons.place, // Icono que deseas mostrar
-              color: Color.fromARGB(255, 47, 83, 182),
+              Icons.place,
+              color: Color(0xFF4CAF50), // Icono verde
               size: 90.0,
             ),
             const SizedBox(width: 5.0),
@@ -84,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text(
                   widget.title,
                   style: const TextStyle(
-                    color: Color.fromARGB(255, 3, 0, 0),
+                    color: Colors.black87, // Texto negro
                     fontSize: 40.0,
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.italic,
@@ -108,19 +106,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   const Text(
                     'Iniciar sesion',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 3, 0, 0),
-                      fontSize: 38.0,
+                      color: Colors.black87, // Texto negro
+                      fontSize: 45.0,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 2,
                     ),
                   ),
-                  const SizedBox(height: 40.0),
+                  const SizedBox(height: 45.0),
                   const Text(
                     'Usuario:',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 3, 0, 0),
-                      fontSize: 27.0,
+                      color: Colors.black54, // Texto gris oscuro
+                      fontSize: 25.0,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.normal,
                     ),
@@ -129,16 +127,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   TextField(
                     controller: _user,
                     decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
                       hintText: 'Ingrese su usuario',
+                    ),
+                    style: const TextStyle(
+                      fontSize: 22.0,
                     ),
                   ),
                   const SizedBox(height: 45.0),
                   const Text(
                     'Contraseña:',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 3, 0, 0),
-                      fontSize: 27.0,
+                      color: Colors.black54, // Texto gris oscuro
+                      fontSize: 25.0,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.normal,
                     ),
@@ -147,7 +147,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   TextField(
                     controller: _pass,
                     decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
                       hintText: 'Ingrese su contraseña',
                     ),
                   ),
@@ -157,8 +156,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 68, 243, 33),
-                        foregroundColor: const Color.fromARGB(255, 43, 109, 13),
+                        backgroundColor:
+                            const Color(0xFFFF9800), // Botón naranja
+                        foregroundColor: Colors.black87, // Texto negro
                         shadowColor: Colors.black,
                         elevation: 5,
                         padding: const EdgeInsets.symmetric(
@@ -172,9 +172,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: const Text(
                         'Ingresar',
                         style: TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Colors.white, // Texto blanco
                           fontSize: 27.0,
-                          fontWeight: FontWeight.bold,
+                          letterSpacing: 2,
                           fontStyle: FontStyle.normal,
                         ),
                       ),
@@ -183,17 +183,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   const SizedBox(height: 60.0),
                   SizedBox(
                     width: 400,
-                    child: ElevatedButton(
+                    child: TextButton(
                       onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 255, 255, 255),
-                        foregroundColor:
-                            const Color.fromARGB(255, 255, 255, 255),
-                        side: const BorderSide(color: Colors.white, width: 0),
-                      ),
                       child: const Text(
-                        '¿No tienes cuenta? Registrate aquí',
+                        '¿No tienes cuenta? Regístrate aquí',
                         style: TextStyle(
                           color: Color.fromARGB(255, 47, 83, 182),
                           fontSize: 19.0,
