@@ -1,4 +1,28 @@
 import 'package:flutter/material.dart';
+import 'initial_screen.dart';
+
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+Future<dynamic> validationUser(String user, String pass) async {
+  final response = await http.post(
+    Uri.parse('http://localhost/API_local_market/validationUser.php'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{'user': user, 'pass': pass}),
+  );
+
+  try {
+    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+    List<dynamic> existing = jsonResponse['validation'];
+    bool id = existing[0]['existing'];
+    return id;
+  } catch (e) {
+    debugPrint("No se pudo ${e.toString()}");
+    return false;
+  }
+}
 
 void main() {
   runApp(const Loggin());
@@ -139,7 +163,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         SizedBox(
                           width: 350,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              bool existing =
+                                  await validationUser(_user.text, _pass.text);
+                              if (existing) {
+                                debugPrint("Se accedio con exito");
+                              } else {
+                                debugPrint("No accedio con exito");
+                              }
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFffca7b),
                               foregroundColor: Colors.black87,
@@ -181,7 +213,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const InitialScreen()));
+                                },
                                 child: const Text(
                                   'Regístrate aquí',
                                   style: TextStyle(
@@ -216,4 +254,24 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+}
+
+void mostrarAlerta(BuildContext context, String mensaje) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Inicio de sesion'),
+        content: Text(mensaje),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cerrar'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'register_negocio.dart';
+import 'register_client.dart';
 
 void main() {
   runApp(const InitialScreen());
@@ -52,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Loggin()));
+                            builder: (context) => const RegisterCliente()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFffca7b),
@@ -82,7 +84,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 370,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/NegocioRe');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RegisterNegocio()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFffca7b),
@@ -121,7 +126,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 300,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/Login');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Loggin()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFffca7b),

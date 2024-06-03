@@ -1,4 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:local_market/Pages/login.dart';
+
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+//Logica de registro;
+Future<dynamic> registerClient(String nombre, String correo, String ubicacion,
+    String pass, int tipo) async {
+  final response = await http.post(
+    Uri.parse('http://localhost/API_local_market/registerClient.php'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'user': nombre,
+      'correo': correo,
+      'pass': pass,
+      'ubicacion': ubicacion,
+      'tipo': tipo.toString()
+    }),
+  );
+}
 
 void main() {
   runApp(const RegisterCliente());
@@ -211,7 +233,57 @@ class _MyHomePageState extends State<MyHomePage> {
                         SizedBox(
                           width: 350,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              if (_name.text.isEmpty ||
+                                  _pass.text.isEmpty ||
+                                  _email.text.isEmpty ||
+                                  _location.text.isEmpty ||
+                                  _confirPass.text.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Llene todos los campos'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                              } else if (_pass.text != _confirPass.text) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Las contraseñas no son iguales'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                              } else if (_pass.text.length < 8) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'La contraseña debe tener al menos 8 caracteres'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                              } else if (_name.text.length < 3) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'El nombre debe tener más de dos caracteres'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                                //Faltan agregar las condiciones si no existe el correo o el nombre ya en la bd;
+                                //Falta la condicion para vereficar el formato de la ubicacion;
+                              } else {
+                                registerClient(_name.text, _email.text,
+                                    _location.text, _pass.text, 2);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const Loggin()));
+                              }
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFffca7b),
                               foregroundColor: Colors.black87,
@@ -225,7 +297,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               minimumSize: const Size(150, 50),
                             ),
                             child: const Text(
-                              'Ingresar',
+                              'Unirse',
                               style: TextStyle(
                                 color: Colors.white, // Texto blanco
                                 fontSize: 27.0,
@@ -253,7 +325,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const Loggin()));
+                                },
                                 child: const Text(
                                   'Inicia sesion',
                                   style: TextStyle(

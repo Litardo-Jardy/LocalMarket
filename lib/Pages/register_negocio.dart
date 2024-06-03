@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:local_market/Pages/login.dart';
 
 void main() {
   runApp(const RegisterNegocio());
@@ -13,7 +14,7 @@ class RegisterNegocio extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF4CAF50), // Semilla de color verde vibrante
+          seedColor: const Color(0xFF4CAF50),
         ),
         useMaterial3: true,
       ),
@@ -41,6 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _diasApertura = TextEditingController();
   final TextEditingController _descripcion = TextEditingController();
   final TextEditingController _confirPass = TextEditingController();
+  bool isVisible = true;
 
   void _userLatestValue() {
     final value = _name.text;
@@ -157,238 +159,301 @@ class _MyHomePageState extends State<MyHomePage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  width: 350.0,
-                                  child: TextField(
-                                    controller: _location,
-                                    decoration: InputDecoration(
-                                      labelText: 'Ubicacion',
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(35),
+                            child: !isVisible
+                                ? Column(
+                                    children: [
+                                      SizedBox(
+                                        width: 350.0,
+                                        child: TextField(
+                                          controller: _referencia,
+                                          decoration: InputDecoration(
+                                            labelText: 'Referencia',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(35),
+                                            ),
+                                            prefixIcon: const Icon(Icons.route),
+                                          ),
+                                          style: const TextStyle(
+                                            fontSize: 22.0,
+                                          ),
+                                        ),
                                       ),
-                                      prefixIcon:
-                                          const Icon(Icons.location_city),
-                                    ),
-                                    style: const TextStyle(
-                                      fontSize: 22.0,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 50.0),
-                                SizedBox(
-                                  width: 350.0,
-                                  child: TextField(
-                                    controller: _referencia,
-                                    decoration: InputDecoration(
-                                      labelText: 'Referencia',
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(35),
+                                      const SizedBox(height: 50.0),
+                                      SizedBox(
+                                        width: 350,
+                                        child: TextField(
+                                          controller: _horasApertura,
+                                          decoration: InputDecoration(
+                                            labelText: 'Horas de apertura',
+                                            hintText: "Ejemplo: 9:00 a 18:00",
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(35),
+                                            ),
+                                            prefixIcon: const Icon(Icons.timer),
+                                          ),
+                                          style: const TextStyle(
+                                            fontSize: 22.0,
+                                          ),
+                                        ),
                                       ),
-                                      prefixIcon: const Icon(Icons.route),
-                                    ),
-                                    style: const TextStyle(
-                                      fontSize: 22.0,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 50.0),
-                                SizedBox(
-                                  width: 350,
-                                  child: TextField(
-                                    controller: _horasApertura,
-                                    decoration: InputDecoration(
-                                      labelText: 'Horas de apertura',
-                                      hintText: "Ejemplo: 9:00 a 18:00",
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(35),
+                                      const SizedBox(height: 50.0),
+                                      SizedBox(
+                                        width: 350,
+                                        child: TextField(
+                                          controller: _diasApertura,
+                                          decoration: InputDecoration(
+                                            labelText: 'Dias de apertura',
+                                            hintText:
+                                                "Ejemplo: Lunes a Viernes",
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(35),
+                                            ),
+                                            prefixIcon: const Icon(
+                                                Icons.calendar_view_day),
+                                          ),
+                                          style: const TextStyle(
+                                            fontSize: 22.0,
+                                          ),
+                                        ),
                                       ),
-                                      prefixIcon: const Icon(Icons.timer),
-                                    ),
-                                    style: const TextStyle(
-                                      fontSize: 22.0,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 50.0),
-                                SizedBox(
-                                  width: 350,
-                                  child: TextField(
-                                    controller: _diasApertura,
-                                    decoration: InputDecoration(
-                                      labelText: 'Dias de apertura',
-                                      hintText: "Ejemplo: Lunes a Viernes",
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(35),
+                                      const SizedBox(height: 50.0),
+                                      SizedBox(
+                                        width: 350,
+                                        child: TextField(
+                                          controller: _descripcion,
+                                          decoration: InputDecoration(
+                                            labelText: 'Descripcion',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(35),
+                                            ),
+                                            prefixIcon:
+                                                const Icon(Icons.wordpress),
+                                          ),
+                                          style: const TextStyle(
+                                            fontSize: 22.0,
+                                          ),
+                                        ),
                                       ),
-                                      prefixIcon:
-                                          const Icon(Icons.calendar_view_day),
-                                    ),
-                                    style: const TextStyle(
-                                      fontSize: 22.0,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 50.0),
-                                SizedBox(
-                                  width: 350,
-                                  child: TextField(
-                                    controller: _descripcion,
-                                    decoration: InputDecoration(
-                                      labelText: 'Descripcion',
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(35),
+                                      const SizedBox(height: 50.0),
+                                      SizedBox(
+                                        width: 350,
+                                        child: ElevatedButton(
+                                          onPressed: () {},
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color(0xFFffca7b),
+                                            foregroundColor: Colors.black87,
+                                            shadowColor: Colors.black,
+                                            elevation: 5,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 30, vertical: 16),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(35),
+                                            ),
+                                            minimumSize: const Size(150, 50),
+                                          ),
+                                          child: const Text(
+                                            'Unirte',
+                                            style: TextStyle(
+                                              color:
+                                                  Colors.white, // Texto blanco
+                                              fontSize: 27.0,
+                                              letterSpacing: 2,
+                                              fontStyle: FontStyle.normal,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      prefixIcon: const Icon(Icons.wordpress),
-                                    ),
-                                    style: const TextStyle(
-                                      fontSize: 22.0,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 40.0),
-                                SizedBox(
-                                  width: 350.0,
-                                  child: TextField(
-                                    controller: _name,
-                                    decoration: InputDecoration(
-                                      labelText: 'Nombre de usuario',
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(35),
+                                    ],
+                                  )
+                                : null,
+                          ),
+                          SingleChildScrollView(
+                            child: isVisible
+                                ? Column(
+                                    children: <Widget>[
+                                      const SizedBox(height: 40.0),
+                                      SizedBox(
+                                        width: 350.0,
+                                        child: TextField(
+                                          controller: _name,
+                                          decoration: InputDecoration(
+                                            labelText: 'Nombre de usuario',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(35),
+                                            ),
+                                            prefixIcon:
+                                                const Icon(Icons.person),
+                                          ),
+                                          style: const TextStyle(
+                                            fontSize: 22.0,
+                                          ),
+                                        ),
                                       ),
-                                      prefixIcon: const Icon(Icons.person),
-                                    ),
-                                    style: const TextStyle(
-                                      fontSize: 22.0,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 50.0),
-                                SizedBox(
-                                  width: 350.0,
-                                  child: TextField(
-                                    controller: _email,
-                                    decoration: InputDecoration(
-                                      labelText: 'Correo',
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(35),
+                                      const SizedBox(height: 50.0),
+                                      SizedBox(
+                                        width: 350.0,
+                                        child: TextField(
+                                          controller: _email,
+                                          decoration: InputDecoration(
+                                            labelText: 'Correo',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(35),
+                                            ),
+                                            prefixIcon: const Icon(Icons.email),
+                                          ),
+                                          style: const TextStyle(
+                                            fontSize: 22.0,
+                                          ),
+                                        ),
                                       ),
-                                      prefixIcon: const Icon(Icons.email),
-                                    ),
-                                    style: const TextStyle(
-                                      fontSize: 22.0,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 50.0),
-                                SizedBox(
-                                  width: 350,
-                                  child: TextField(
-                                    controller: _pass,
-                                    decoration: InputDecoration(
-                                      labelText: 'Contraseña',
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(35),
+                                      const SizedBox(height: 50.0),
+                                      SizedBox(
+                                        width: 350.0,
+                                        child: TextField(
+                                          controller: _location,
+                                          decoration: InputDecoration(
+                                            labelText: 'Ubicacion',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(35),
+                                            ),
+                                            prefixIcon:
+                                                const Icon(Icons.location_city),
+                                          ),
+                                          style: const TextStyle(
+                                            fontSize: 22.0,
+                                          ),
+                                        ),
                                       ),
-                                      prefixIcon: const Icon(Icons.lock),
-                                    ),
-                                    style: const TextStyle(
-                                      fontSize: 22.0,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 50.0),
-                                SizedBox(
-                                  width: 350,
-                                  child: TextField(
-                                    controller: _confirPass,
-                                    decoration: InputDecoration(
-                                      labelText: 'Contraseña',
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(35),
+                                      const SizedBox(height: 50.0),
+                                      SizedBox(
+                                        width: 350,
+                                        child: TextField(
+                                          controller: _pass,
+                                          decoration: InputDecoration(
+                                            labelText: 'Contraseña',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(35),
+                                            ),
+                                            prefixIcon: const Icon(Icons.lock),
+                                          ),
+                                          style: const TextStyle(
+                                            fontSize: 22.0,
+                                          ),
+                                        ),
                                       ),
-                                      prefixIcon: const Icon(Icons.lock),
-                                    ),
-                                    style: const TextStyle(
-                                      fontSize: 22.0,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                      const SizedBox(height: 50.0),
+                                      SizedBox(
+                                        width: 350,
+                                        child: TextField(
+                                          controller: _confirPass,
+                                          decoration: InputDecoration(
+                                            labelText: 'Contraseña',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(35),
+                                            ),
+                                            prefixIcon: const Icon(Icons.lock),
+                                          ),
+                                          style: const TextStyle(
+                                            fontSize: 22.0,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 50.0),
+                                      SizedBox(
+                                        width: 350,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            isVisible = !isVisible;
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color(0xFFffca7b),
+                                            foregroundColor: Colors.black87,
+                                            shadowColor: Colors.black,
+                                            elevation: 5,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 30, vertical: 16),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(35),
+                                            ),
+                                            minimumSize: const Size(150, 50),
+                                          ),
+                                          child: const Text(
+                                            'Siguiente ->',
+                                            style: TextStyle(
+                                              color:
+                                                  Colors.white, // Texto blanco
+                                              fontSize: 27.0,
+                                              letterSpacing: 2,
+                                              fontStyle: FontStyle.normal,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : null,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 40.0),
+                    SizedBox(
+                      width: 350,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(width: 20.0),
+                          const Text(
+                            '¿Ya tienes cuenta?',
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                              letterSpacing: 2,
                             ),
                           ),
-                          const SizedBox(height: 50.0),
-                          SizedBox(
-                            width: 350,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFffca7b),
-                                foregroundColor: Colors.black87,
-                                shadowColor: Colors.black,
-                                elevation: 5,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(35),
-                                ),
-                                minimumSize: const Size(150, 50),
-                              ),
-                              child: const Text(
-                                'Ingresar',
-                                style: TextStyle(
-                                  color: Colors.white, // Texto blanco
-                                  fontSize: 27.0,
-                                  letterSpacing: 2,
-                                  fontStyle: FontStyle.normal,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 40.0),
-                          SizedBox(
-                            width: 350,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const SizedBox(width: 20.0),
-                                const Text(
-                                  '¿Ya tienes cuenta?',
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.italic,
-                                    letterSpacing: 2,
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: const Text(
-                                    'Inicia sesion',
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 47, 83, 182),
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FontStyle.italic,
-                                      letterSpacing: 2,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 30.0),
-                          const Align(
-                            alignment: Alignment.topCenter,
-                            child: Text(
-                              '© 2024 AstroChat. Todos los derechos reservados.',
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Loggin()));
+                            },
+                            child: const Text(
+                              'Inicia sesion',
                               style: TextStyle(
-                                  color: Color.fromARGB(255, 182, 181, 181)),
+                                color: Color.fromARGB(255, 47, 83, 182),
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
+                                letterSpacing: 2,
+                              ),
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    const SizedBox(height: 30.0),
+                    const Align(
+                      alignment: Alignment.topCenter,
+                      child: Text(
+                        '© 2024 AstroChat. Todos los derechos reservados.',
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 182, 181, 181)),
                       ),
                     ),
                   ],
