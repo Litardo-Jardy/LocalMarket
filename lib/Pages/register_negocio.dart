@@ -1,6 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:local_market/Pages/login.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+Future<dynamic> registerNegocio(
+    String name,
+    String pass,
+    String email,
+    String location,
+    int tipo,
+    String referencia,
+    String horasApertura,
+    String diasApertura,
+    String descripcion,
+    String? categoria) async {
+  await http.post(
+    Uri.parse('http://localhost/API_local_market/registerNegocio.php'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String?, String?>{
+      'user': name,
+      'correo': email,
+      'pass': pass,
+      'ubicacion': location,
+      'tipo': tipo.toString(),
+      'referencia': referencia,
+      'horaApertura': horasApertura,
+      'diasApertura': diasApertura,
+      'descripcion': descripcion,
+      'categoria': categoria
+    }),
+  );
+}
+
 void main() {
   runApp(const RegisterNegocio());
 }
@@ -43,6 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _descripcion = TextEditingController();
   final TextEditingController _confirPass = TextEditingController();
   bool isVisible = true;
+  String? _selectedItem;
+  List<String>? _items;
+  int user = 0;
 
   void _userLatestValue() {
     final value = _name.text;
@@ -101,6 +138,31 @@ class _MyHomePageState extends State<MyHomePage> {
     _diasApertura.addListener(_diasAperturaLatestValue);
     _descripcion.addListener(_descripcionLatestValue);
     _referencia.addListener(_referenciaLatestValue);
+    categorys();
+  }
+
+  Future<void> categorys() async {
+    try {
+      final response = await http
+          .get(Uri.parse('http://localhost/API_local_market/getCategorys.php'));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        if (data['categorys'] != null && data['categorys'] is List) {
+          setState(() {
+            _items = List<String>.from(
+                data['categorys'].map((item) => item[0] as String));
+          });
+        } else {
+          throw Exception('Error al mostrar los datos');
+        }
+      } else {
+        throw Exception('Error en la petición: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint("No se pudo ${e.toString()}");
+    }
   }
 
   @override
@@ -162,6 +224,39 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: !isVisible
                                 ? Column(
                                     children: [
+                                      SizedBox(
+                                        width: 300,
+                                        child: DropdownButton<String>(
+                                          hint: const Text(
+                                              'Categoria del negocio'),
+                                          value: _selectedItem,
+                                          isExpanded: true,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 10, horizontal: 10),
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 18),
+                                          icon: const Icon(
+                                              Icons.arrow_drop_down,
+                                              color: Colors.blueAccent),
+                                          iconSize: 24,
+                                          elevation: 16,
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              _selectedItem = newValue;
+                                            });
+                                          },
+                                          items: _items
+                                              ?.map<DropdownMenuItem<String>>(
+                                                  (String value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 50.0),
                                       SizedBox(
                                         width: 350.0,
                                         child: TextField(
@@ -242,7 +337,64 @@ class _MyHomePageState extends State<MyHomePage> {
                                       SizedBox(
                                         width: 350,
                                         child: ElevatedButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            if (_descripcion.text.isEmpty ||
+                                                _referencia.text.isEmpty ||
+                                                _horasApertura.text.isEmpty ||
+                                                _diasApertura.text.isEmpty) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'Llene todos los campos'),
+                                                  backgroundColor: Colors.red,
+                                                  duration:
+                                                      Duration(seconds: 3),
+                                                ),
+                                              );
+                                            } else if (_descripcion
+                                                    .text.length >
+                                                300) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'La descripcion excede los caracteres permitidos'),
+                                                  backgroundColor: Colors.red,
+                                                  duration:
+                                                      Duration(seconds: 3),
+                                                ),
+                                              );
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'Te uniste con exito'),
+                                                  backgroundColor: Colors.blue,
+                                                  duration:
+                                                      Duration(seconds: 3),
+                                                ),
+                                              );
+                                              registerNegocio(
+                                                  _name.text,
+                                                  _pass.text,
+                                                  _email.text,
+                                                  _location.text,
+                                                  3,
+                                                  _referencia.text,
+                                                  _horasApertura.text,
+                                                  _diasApertura.text,
+                                                  _descripcion.text,
+                                                  _selectedItem);
+
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const Loggin()));
+                                            }
+                                          },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
                                                 const Color(0xFFffca7b),
@@ -373,8 +525,62 @@ class _MyHomePageState extends State<MyHomePage> {
                                       SizedBox(
                                         width: 350,
                                         child: ElevatedButton(
-                                          onPressed: () {
-                                            isVisible = !isVisible;
+                                          onPressed: () async {
+                                            if (_name.text.isEmpty ||
+                                                _pass.text.isEmpty ||
+                                                _email.text.isEmpty ||
+                                                _location.text.isEmpty ||
+                                                _confirPass.text.isEmpty) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'Llene todos los campos'),
+                                                  backgroundColor: Colors.red,
+                                                  duration:
+                                                      Duration(seconds: 3),
+                                                ),
+                                              );
+                                            } else if (_pass.text !=
+                                                _confirPass.text) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'Las contraseñas no son iguales'),
+                                                  backgroundColor: Colors.red,
+                                                  duration:
+                                                      Duration(seconds: 3),
+                                                ),
+                                              );
+                                            } else if (_pass.text.length < 8) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'La contraseña debe tener al menos 8 caracteres'),
+                                                  backgroundColor: Colors.red,
+                                                  duration:
+                                                      Duration(seconds: 3),
+                                                ),
+                                              );
+                                            } else if (_name.text.length < 3) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'El nombre debe tener más de dos caracteres'),
+                                                  backgroundColor: Colors.red,
+                                                  duration:
+                                                      Duration(seconds: 3),
+                                                ),
+                                              );
+                                              //Faltan agregar las condiciones si no existe el correo o el nombre ya en la bd;
+                                            } else {
+                                              setState(() {
+                                                isVisible = !isVisible;
+                                              });
+                                            }
                                           },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:

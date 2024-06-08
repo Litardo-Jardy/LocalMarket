@@ -16,8 +16,8 @@ Future<dynamic> validationUser(String user, String pass) async {
   try {
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
     List<dynamic> existing = jsonResponse['validation'];
-    bool id = existing[0]['existing'];
-    return id;
+    bool result = existing[0]['existing'];
+    return result;
   } catch (e) {
     debugPrint("No se pudo ${e.toString()}");
     return false;
@@ -166,10 +166,32 @@ class _MyHomePageState extends State<MyHomePage> {
                             onPressed: () async {
                               bool existing =
                                   await validationUser(_user.text, _pass.text);
-                              if (existing) {
-                                debugPrint("Se accedio con exito");
+                              if (_user.text.isEmpty || _pass.text.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Llene todos los campos'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
                               } else {
-                                debugPrint("No accedio con exito");
+                                if (existing) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Se accedio con exito'),
+                                      backgroundColor: Colors.blue,
+                                      duration: Duration(seconds: 3),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Credenciales incorrectas'),
+                                      backgroundColor: Colors.red,
+                                      duration: Duration(seconds: 3),
+                                    ),
+                                  );
+                                }
                               }
                             },
                             style: ElevatedButton.styleFrom(

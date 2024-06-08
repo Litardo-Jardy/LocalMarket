@@ -7,7 +7,7 @@ import 'dart:convert';
 //Logica de registro;
 Future<dynamic> registerClient(String nombre, String correo, String ubicacion,
     String pass, int tipo) async {
-  final response = await http.post(
+  await http.post(
     Uri.parse('http://localhost/API_local_market/registerClient.php'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -276,6 +276,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                 //Faltan agregar las condiciones si no existe el correo o el nombre ya en la bd;
                                 //Falta la condicion para vereficar el formato de la ubicacion;
                               } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Te uniste con exito'),
+                                    backgroundColor: Colors.blue,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
                                 registerClient(_name.text, _email.text,
                                     _location.text, _pass.text, 2);
                                 Navigator.push(
