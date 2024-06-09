@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:local_market/Pages/login.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
 import 'dart:convert';
 
 //Logica de registro;
@@ -59,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _location = TextEditingController();
   final TextEditingController _confirPass = TextEditingController();
+  Position? _currentPosition;
 
   void _userLatestValue() {
     final value = _name.text;
@@ -93,6 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _email.addListener(_emailLatestValue);
     _confirPass.addListener(_confirPassLatestValue);
     _location.addListener(_locationLatestValue);
+    _currentPosition;
   }
 
   @override
@@ -233,7 +236,17 @@ class _MyHomePageState extends State<MyHomePage> {
                         SizedBox(
                           width: 350,
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              bool serviceEnabled;
+                              LocationPermission permission;
+                              serviceEnabled =
+                                  await Geolocator.isLocationServiceEnabled();
+                              permission = await Geolocator.checkPermission();
+                              if (!serviceEnabled) {
+                                // Servicios de ubicación no habilitados, no se puede continuar
+                                return Future.error(
+                                    'Location services are disabled.');
+                              }
                               if (_name.text.isEmpty ||
                                   _pass.text.isEmpty ||
                                   _email.text.isEmpty ||
@@ -275,7 +288,40 @@ class _MyHomePageState extends State<MyHomePage> {
                                 );
                                 //Faltan agregar las condiciones si no existe el correo o el nombre ya en la bd;
                                 //Falta la condicion para vereficar el formato de la ubicacion;
+                              } else if (!serviceEnabled) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Debe encender la ubicacion para continuar'),
+                                    backgroundColor: Colors.red,
+                                    duration: Duration(seconds: 3),
+                                  ),
+                                );
+                              } else if (permission ==
+                                  LocationPermission.denied) {
+                                permission =
+                                    await Geolocator.requestPermission();
+                                if (permission == LocationPermission.denied) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Permisos de ubicacion denegados'),
+                                      backgroundColor: Colors.red,
+                                      duration: Duration(seconds: 3),
+                                    ),
+                                  );
+                                }
                               } else {
+                                Position position =
+                                    await Geolocator.getCurrentPosition(
+                                        desiredAccuracy: LocationAccuracy.high);
+                                setState(() {
+                                  _currentPosition = position;
+                                });
+                                setState(() {
+                                  _location.text =
+                                      "${_currentPosition?.latitude}|${_currentPosition?.longitude}";
+                                });
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text('Te uniste con exito'),

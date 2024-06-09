@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:local_market/Pages/login.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
 import 'dart:convert';
 
 Future<dynamic> registerNegocio(
