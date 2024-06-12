@@ -5,10 +5,12 @@ import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'dart:convert';
 
+import 'package:local_market/Pages/preferents.dart';
+
 //Logica de registro;
-Future<dynamic> registerClient(String nombre, String correo, String ubicacion,
+Future<int> registerClient(String nombre, String correo, String ubicacion,
     String pass, int tipo) async {
-  await http.post(
+  final response = await http.post(
     Uri.parse('http://localhost/API_local_market/registerClient.php'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -21,6 +23,12 @@ Future<dynamic> registerClient(String nombre, String correo, String ubicacion,
       'tipo': tipo.toString()
     }),
   );
+  if (response.statusCode == 200) {
+    final responseBody = json.decode(response.body);
+    return responseBody['id'];
+  } else {
+    return 0;
+  }
 }
 
 void main() {
@@ -61,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _location = TextEditingController();
   final TextEditingController _confirPass = TextEditingController();
   Position? _currentPosition;
+  int user = 0;
 
   void _userLatestValue() {
     final value = _name.text;
@@ -106,6 +115,26 @@ class _MyHomePageState extends State<MyHomePage> {
     _location.dispose();
     _confirPass.dispose();
     super.dispose();
+  }
+
+  void _registerAndNavigate() async {
+    //Funcion que permite pasar una variable antre pantallas, la tengo aqui por que no me permite pasar el valor
+    //"userId" de manera normal dentro del widget debio a que no se maneja bien la asincronia de la llamada a la api;
+    try {
+      int userId = await registerClient(
+          _name.text, _email.text, _location.text, _pass.text, 2);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Preferents(
+              usuarioId:
+                  userId), //Colar la logica correcta para redireccionar con el id del usuario reciente;
+        ),
+      );
+    } catch (e) {
+      debugPrint('Error registering user: $e');
+    }
   }
 
   @override
@@ -242,15 +271,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               serviceEnabled =
                                   await Geolocator.isLocationServiceEnabled();
                               permission = await Geolocator.checkPermission();
-                              if (!serviceEnabled) {
-                                // Servicios de ubicación no habilitados, no se puede continuar
-                                return Future.error(
-                                    'Location services are disabled.');
-                              }
                               if (_name.text.isEmpty ||
                                   _pass.text.isEmpty ||
                                   _email.text.isEmpty ||
-                                  _location.text.isEmpty ||
                                   _confirPass.text.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -329,12 +352,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     duration: Duration(seconds: 3),
                                   ),
                                 );
-                                registerClient(_name.text, _email.text,
-                                    _location.text, _pass.text, 2);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Loggin()));
+                                _registerAndNavigate();
                               }
                             },
                             style: ElevatedButton.styleFrom(

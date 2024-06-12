@@ -1,13 +1,20 @@
 plugins {
-    id "com.android.application"
-    id "kotlin-android"
-    id "dev.flutter.flutter-gradle-plugin"
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    namespace "com.example.local_market"
-    compileSdk 34
-    ndkVersion "21.3.6528147"
+    namespace 'com.example.local_market'
+    compileSdk 34 // Actualiza esta línea a la versión correcta
+
+    defaultConfig {
+        applicationId 'com.example.local_market'
+        minSdkVersion 21
+        targetSdkVersion 34 // Asegúrate de que esta versión sea la correcta
+        versionCode 1
+        versionName '1.0'
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -18,18 +25,6 @@ android {
         jvmTarget = '1.8'
     }
 
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-
-    defaultConfig {
-        applicationId "com.example.local_market"
-        minSdkVersion 21
-        targetSdkVersion 33
-        versionCode 1
-        versionName "1.0"
-    }
-
     buildTypes {
         release {
             signingConfig signingConfigs.debug
@@ -37,11 +32,6 @@ android {
     }
 }
 
-flutter {
-    source '../..'
-}
-
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    // Otras dependencias aquí
 }

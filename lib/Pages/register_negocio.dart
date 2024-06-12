@@ -81,6 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String? _selectedItem;
   List<String>? _items;
   int user = 0;
+  Position? _currentPosition;
 
   void _userLatestValue() {
     final value = _name.text;
@@ -140,6 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _descripcion.addListener(_descripcionLatestValue);
     _referencia.addListener(_referenciaLatestValue);
     categorys();
+    _currentPosition;
   }
 
   Future<void> categorys() async {
@@ -527,10 +529,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                         width: 350,
                                         child: ElevatedButton(
                                           onPressed: () async {
+                                            bool serviceEnabled;
+                                            LocationPermission permission;
+                                            serviceEnabled = await Geolocator
+                                                .isLocationServiceEnabled();
+                                            permission = await Geolocator
+                                                .checkPermission();
                                             if (_name.text.isEmpty ||
                                                 _pass.text.isEmpty ||
                                                 _email.text.isEmpty ||
-                                                _location.text.isEmpty ||
                                                 _confirPass.text.isEmpty) {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(
@@ -577,7 +584,44 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 ),
                                               );
                                               //Faltan agregar las condiciones si no existe el correo o el nombre ya en la bd;
+                                            } else if (!serviceEnabled) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'Debe encender la ubicacion para continuar'),
+                                                  backgroundColor: Colors.red,
+                                                  duration:
+                                                      Duration(seconds: 3),
+                                                ),
+                                              );
+                                            } else if (permission ==
+                                                LocationPermission.denied) {
+                                              permission = await Geolocator
+                                                  .requestPermission();
+                                              if (permission ==
+                                                  LocationPermission.denied) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                        'Permisos de ubicacion denegados'),
+                                                    backgroundColor: Colors.red,
+                                                    duration:
+                                                        Duration(seconds: 3),
+                                                  ),
+                                                );
+                                              }
                                             } else {
+                                              Position position =
+                                                  await Geolocator
+                                                      .getCurrentPosition(
+                                                          desiredAccuracy:
+                                                              LocationAccuracy
+                                                                  .high);
+                                              setState(() {
+                                                _currentPosition = position;
+                                              });
                                               setState(() {
                                                 isVisible = !isVisible;
                                               });
