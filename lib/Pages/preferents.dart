@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:local_market/Pages/dashboard.dart';
 
 class Preferents extends StatelessWidget {
   final int usuarioId;
@@ -35,18 +38,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final TextEditingController _query = TextEditingController();
   List<String>? _items;
   List<String> selects = [];
+
+  void _userLatestValue() {
+    final value = _query.text;
+    debugPrint(value);
+  }
 
   @override
   void initState() {
     super.initState();
+    _query.addListener(_userLatestValue);
     categorys();
   }
 
   @override
   void dispose() {
     super.dispose();
+    _query.dispose();
   }
 
   Future<void> categorys() async {
@@ -105,71 +116,97 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  "Selecciona tus preferencias",
-                  style: TextStyle(
-                    color: Color(0xFFffca7b),
-                    fontSize: 37.5,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                    letterSpacing: 2,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 40),
-                Wrap(
-                  spacing: 50,
-                  runSpacing: 50,
-                  children: _items?.map((e) {
-                        bool isSelected = selects.contains(e);
-                        return GestureDetector(
-                          onTap: () {
-                            onItemPressed(e);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Te uniste con éxito'),
-                                backgroundColor: Colors.blue,
-                                duration: Duration(seconds: 3),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            width: 130,
-                            height: 90,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: const Color(0xFFffca7b),
-                                width: 2,
-                              ),
-                              color: isSelected
-                                  ? Colors.green
-                                  : const Color(0xFFffca7b),
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 5,
-                                  blurRadius: 7,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Text(
-                                e,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                  letterSpacing: 1.5,
-                                ),
-                              ),
-                            ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        width: 380.0,
+                        child: Text(
+                          "Elige 3 o mas negocios de tu preferencia.",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 5, 5, 5),
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.normal,
+                            letterSpacing: 2,
                           ),
-                        );
-                      }).toList() ??
-                      [],
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                      const SizedBox(height: 25),
+                      SizedBox(
+                        width: 380.0,
+                        child: TextField(
+                          controller: _query,
+                          decoration: InputDecoration(
+                            labelText: 'Buscar',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            prefixIcon: const Icon(Icons.search),
+                          ),
+                          style: const TextStyle(
+                            fontSize: 19.0,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      Wrap(
+                        spacing: 60,
+                        runSpacing: 50,
+                        children: _items?.map((e) {
+                              bool isSelected = selects.contains(e);
+                              return GestureDetector(
+                                onTap: () {
+                                  onItemPressed(e);
+                                },
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: 80,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: const Color(0xFFffca7b),
+                                          width: 1,
+                                        ),
+                                        color: isSelected
+                                            ? Colors.green
+                                            : const Color(0xFFffca7b),
+                                        borderRadius: BorderRadius.circular(50),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: const Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: const Center(
+                                          child: Icon(
+                                              Icons.shopping_bag_outlined)),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      e,
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic,
+                                        letterSpacing: 1.5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList() ??
+                            [],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -178,18 +215,18 @@ class _MyHomePageState extends State<MyHomePage> {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.all(60.0),
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.8,
+              child: SizedBox(
+                width: 380,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFffca7b),
+                    backgroundColor: Color.fromARGB(255, 214, 162, 84),
                     foregroundColor: Colors.black87,
                     shadowColor: Colors.black,
                     elevation: 5,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(35),
+                      borderRadius: BorderRadius.circular(25),
                     ),
                     minimumSize: const Size(150, 50),
                   ),
@@ -197,6 +234,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     for (var i = 0; i < selects.length; i++) {
                       addPreferens(selects[i]);
                     }
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Dashboard(),
+                        ));
                   },
                   child: Text(
                     'Seleccionar (${selects.length})',

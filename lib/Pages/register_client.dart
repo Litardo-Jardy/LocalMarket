@@ -118,8 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _registerAndNavigate() async {
-    //Funcion que permite pasar una variable antre pantallas, la tengo aqui por que no me permite pasar el valor
-    //"userId" de manera normal dentro del widget debio a que no se maneja bien la asincronia de la llamada a la api;
     try {
       int userId = await registerClient(
           _name.text, _email.text, _location.text, _pass.text, 2);
@@ -127,9 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Preferents(
-              usuarioId:
-                  userId), //Colar la logica correcta para redireccionar con el id del usuario reciente;
+          builder: (context) => Preferents(usuarioId: userId),
         ),
       );
     } catch (e) {

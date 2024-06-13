@@ -1,28 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:local_market/Pages/dashboard.dart';
+import 'package:local_market/State/sesion.dart';
 import 'initial_screen.dart';
+import 'package:provider/provider.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-Future<dynamic> validationUser(String user, String pass) async {
-  final response = await http.post(
-    Uri.parse('http://localhost/API_local_market/validationUser.php'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{'user': user, 'pass': pass}),
-  );
-
-  try {
-    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-    List<dynamic> existing = jsonResponse['validation'];
-    bool result = existing[0]['existing'];
-    return result;
-  } catch (e) {
-    debugPrint("No se pudo ${e.toString()}");
-    return false;
-  }
-}
 
 void main() {
   runApp(const Loggin());
@@ -33,17 +16,7 @@ class Loggin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF4CAF50), // Semilla de color verde vibrante
-        ),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Local Market'),
-      debugShowCheckedModeBanner: false,
-    );
+    return const MyHomePage(title: 'Local Market');
   }
 }
 
@@ -58,7 +31,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _user = TextEditingController();
   final TextEditingController _pass = TextEditingController();
-
   void _userLatestValue() {
     final value = _user.text;
     debugPrint(value);
@@ -83,8 +55,28 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
+  Future<dynamic> validationUser(String user, String pass) async {
+    final response = await http.post(
+      Uri.parse('http://localhost/API_local_market/validationUser.php'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{'user': user, 'pass': pass}),
+    );
+
+    try {
+      final data = json.decode(response.body);
+      int result = int.parse(data['validation'][0][0]);
+      return result;
+    } catch (e) {
+      debugPrint("No se pudo ${e.toString()}");
+      return 0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<StateSesion>();
     return Scaffold(
       backgroundColor: const Color.fromARGB(221, 245, 244, 244),
       body: Center(
@@ -164,8 +156,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: 350,
                           child: ElevatedButton(
                             onPressed: () async {
-                              bool existing =
-                                  await validationUser(_user.text, _pass.text);
                               if (_user.text.isEmpty || _pass.text.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -175,7 +165,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 );
                               } else {
-                                if (existing) {
+                                int id = await validationUser(
+                                    _user.text, _pass.text);
+                                if (id > 0) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text('Se accedio con exito'),
@@ -183,6 +175,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                       duration: Duration(seconds: 3),
                                     ),
                                   );
+                                  user.setId(
+                                      id); //Mandando el usuario que acabo de loggearse al estado global de la aplicacion;
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const Dashboard()));
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -276,24 +275,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-}
-
-void mostrarAlerta(BuildContext context, String mensaje) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text('Inicio de sesion'),
-        content: Text(mensaje),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Cerrar'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
 }

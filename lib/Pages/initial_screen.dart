@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:local_market/Pages/preferents.dart';
+import 'package:local_market/Pages/register_negocio.dart';
 import 'login.dart';
-import 'register_negocio.dart';
 import 'register_client.dart';
 
 void main() {
@@ -87,7 +88,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const RegisterNegocio()));
+                          builder: (context) => const RegisterNegocio(),
+                        ));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFffca7b),
