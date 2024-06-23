@@ -184,9 +184,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ),
                                         ],
                                       ),
-                                      child: const Center(
-                                          child: Icon(
-                                              Icons.shopping_bag_outlined)),
+                                      child: SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                10), // Radio de la esquina
+                                            child: Image.network(
+                                                'https://img.icons8.com/ios-filled/50/FF8B00/cocktail.png')),
+                                      ),
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
@@ -234,6 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     for (var i = 0; i < selects.length; i++) {
                       addPreferens(selects[i]);
                     }
+
                     Navigator.push(
                         context,
                         MaterialPageRoute(

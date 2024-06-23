@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:local_market/Pages/dashboard.dart';
 import 'State/sesion.dart';
 import 'Pages/login.dart';
 import 'Pages/register_negocio.dart';
@@ -17,14 +18,15 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => StateSesion()),
+        ChangeNotifierProvider(create: (context) => StateSesion()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         routes: {
-          '/Login': (context) => const Loggin(),
+          '/Login': (context) => Loggin(),
           '/ClienteRe': (context) => const RegisterCliente(),
           '/NegocioRe': (context) => const RegisterNegocio(),
+          '/Dashboard': (context) => const Dashboard(),
           '/': (context) => const InitialScreen(),
         },
         theme: ThemeData(

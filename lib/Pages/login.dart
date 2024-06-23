@@ -7,6 +7,26 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+//Llama a al metodo getUser de la base de datos el cual devuelve todos los datos de el usuario si es ecnontrado;
+Future<dynamic> validationUser(String user, String pass) async {
+  final response = await http.post(
+    Uri.parse('http://localhost/API_local_market/getUser.php'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{'user': user, 'pass': pass}),
+  );
+
+  try {
+    final data = json.decode(response.body);
+    List<String> result = List<String>.from(data["user"][0]);
+    return result;
+  } catch (e) {
+    debugPrint("No se pudieron cargar los datos. Error: ${e.toString()}");
+    return [];
+  }
+}
+
 void main() {
   runApp(const Loggin());
 }
@@ -55,223 +75,215 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  Future<dynamic> validationUser(String user, String pass) async {
-    final response = await http.post(
-      Uri.parse('http://localhost/API_local_market/validationUser.php'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{'user': user, 'pass': pass}),
-    );
-
-    try {
-      final data = json.decode(response.body);
-      int result = int.parse(data['validation'][0][0]);
-      return result;
-    } catch (e) {
-      debugPrint("No se pudo ${e.toString()}");
-      return 0;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = context.watch<StateSesion>();
     return Scaffold(
       backgroundColor: const Color.fromARGB(221, 245, 244, 244),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 370,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    width: 370,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Image(
-                              width: 250,
-                              image: AssetImage('lib/assets/logo.png')),
-                          Align(
-                            alignment: Alignment
-                                .bottomCenter, // Puedes ajustar esto según tus necesidades
-                            child: Text(
-                              'Iniciar Sesion',
-                              style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 38.0,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                                letterSpacing: 2,
-                              ),
-                            ),
-                          )
-                        ]),
-                  ),
-                  const SizedBox(height: 45.0),
-                  SizedBox(
-                    width: 380,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 350.0,
-                          child: TextField(
-                            controller: _user,
-                            decoration: InputDecoration(
-                              labelText: 'Usuario',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(35),
-                              ),
-                              prefixIcon: const Icon(Icons.person),
-                            ),
-                            style: const TextStyle(
-                              fontSize: 22.0,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 50.0),
-                        SizedBox(
-                          width: 350,
-                          child: TextField(
-                            controller: _pass,
-                            decoration: InputDecoration(
-                              labelText: 'Contraseña',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(35),
-                              ),
-                              prefixIcon: const Icon(Icons.lock),
-                            ),
-                            style: const TextStyle(
-                              fontSize: 22.0,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 45.0),
-                        SizedBox(
-                          width: 350,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              if (_user.text.isEmpty || _pass.text.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Llene todos los campos'),
-                                    backgroundColor: Colors.red,
-                                    duration: Duration(seconds: 3),
-                                  ),
-                                );
-                              } else {
-                                int id = await validationUser(
-                                    _user.text, _pass.text);
-                                if (id > 0) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Se accedio con exito'),
-                                      backgroundColor: Colors.blue,
-                                      duration: Duration(seconds: 3),
-                                    ),
-                                  );
-                                  user.setId(
-                                      id); //Mandando el usuario que acabo de loggearse al estado global de la aplicacion;
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const Dashboard()));
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Credenciales incorrectas'),
-                                      backgroundColor: Colors.red,
-                                      duration: Duration(seconds: 3),
-                                    ),
-                                  );
-                                }
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFffca7b),
-                              foregroundColor: Colors.black87,
-                              shadowColor: Colors.black,
-                              elevation: 5,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 30, vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(35),
-                              ),
-                              minimumSize: const Size(150, 50),
-                            ),
-                            child: const Text(
-                              'Ingresar',
-                              style: TextStyle(
-                                color: Colors.white, // Texto blanco
-                                fontSize: 27.0,
-                                letterSpacing: 2,
-                                fontStyle: FontStyle.normal,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 50.0),
-                        SizedBox(
-                          width: 350,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(width: 20.0),
-                              const Text(
-                                '¿No tienes cuenta?',
+      body: ListView(
+        children: [Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 370,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      width: 370,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Image(
+                                width: 250,
+                                image: AssetImage('lib/assets/logo.png')),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Text(
+                                'Iniciar Sesion',
                                 style: TextStyle(
                                   color: Colors.black87,
-                                  fontSize: 15.0,
+                                  fontSize: 38.0,
                                   fontWeight: FontWeight.bold,
                                   fontStyle: FontStyle.italic,
                                   letterSpacing: 2,
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const InitialScreen()));
-                                },
-                                child: const Text(
-                                  'Regístrate aquí',
+                            )
+                          ]),
+                    ),
+                    const SizedBox(height: 45.0),
+                    SizedBox(
+                      width: 380,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 350.0,
+                            child: TextField(
+                              controller: _user,
+                              decoration: InputDecoration(
+                                labelText: 'Usuario',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(35),
+                                ),
+                                prefixIcon: const Icon(Icons.person),
+                              ),
+                              style: const TextStyle(
+                                fontSize: 22.0,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 50.0),
+                          SizedBox(
+                            width: 350,
+                            child: TextField(
+                              controller: _pass,
+                              decoration: InputDecoration(
+                                labelText: 'Contraseña',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(35),
+                                ),
+                                prefixIcon: const Icon(Icons.lock),
+                              ),
+                              style: const TextStyle(
+                                fontSize: 22.0,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 45.0),
+                          SizedBox(
+                            width: 350,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                if (_user.text.isEmpty || _pass.text.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Llene todos los campos'),
+                                      backgroundColor: Colors.red,
+                                      duration: Duration(seconds: 3),
+                                    ),
+                                  );
+                                } else {
+                                  List<String> data = await validationUser(
+                                      _user.text, _pass.text);
+                                  if (data.isNotEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Se accedio con exito'),
+                                        backgroundColor: Colors.blue,
+                                        duration: Duration(seconds: 3),
+                                      ),
+                                    );
+                                    // Latitude - Longitude
+                                    List<String> splitLocation =
+                                        data[4].split('|');
+                                    user.setId(int.parse(data[
+                                        0])); //Mandando el usuario que acabo de loggearse al estado global de la aplicacion;
+                                    user.setName(data[1]);
+                                    user.setCorreo(data[2]);
+                                    user.setPass(data[3]);
+                                    user.setLatitude(splitLocation[0]);
+                                    user.setLongitude(splitLocation[1]);
+                                    user.setTipo(int.parse(data[5]));
+                                    user.setUrl(data[6]);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Dashboard()));
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Credenciales incorrectas'),
+                                        backgroundColor: Colors.red,
+                                        duration: Duration(seconds: 3),
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFffca7b),
+                                foregroundColor: Colors.black87,
+                                shadowColor: Colors.black,
+                                elevation: 5,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(35),
+                                ),
+                                minimumSize: const Size(150, 50),
+                              ),
+                              child: const Text(
+                                'Ingresar',
+                                style: TextStyle(
+                                  color: Colors.white, // Texto blanco
+                                  fontSize: 27.0,
+                                  letterSpacing: 2,
+                                  fontStyle: FontStyle.normal,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 50.0),
+                          SizedBox(
+                            width: 350,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 20.0),
+                                const Text(
+                                  '¿No tienes cuenta?',
                                   style: TextStyle(
-                                    color: Color.fromARGB(255, 47, 83, 182),
+                                    color: Colors.black87,
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.bold,
                                     fontStyle: FontStyle.italic,
                                     letterSpacing: 2,
                                   ),
                                 ),
-                              ),
-                            ],
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const InitialScreen()));
+                                  },
+                                  child: const Text(
+                                    'Regístrate aquí',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 47, 83, 182),
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.italic,
+                                      letterSpacing: 2,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 30.0),
-                        const Align(
-                          alignment: Alignment.topCenter,
-                          child: Text(
-                            '© 2024 AstroChat. Todos los derechos reservados.',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 182, 181, 181)),
+                          const SizedBox(height: 30.0),
+                          const Align(
+                            alignment: Alignment.topCenter,
+                            child: Text(
+                              '© 2024 AstroChat. Todos los derechos reservados.',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 182, 181, 181)),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        ),]
       ),
     );
   }

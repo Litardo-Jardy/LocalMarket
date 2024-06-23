@@ -395,7 +395,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          const Loggin()));
+                                                          Loggin()));
                                             }
                                           },
                                           style: ElevatedButton.styleFrom(
@@ -682,7 +682,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Loggin()));
+                                      builder: (context) => Loggin()));
                             },
                             child: const Text(
                               'Inicia sesion',
