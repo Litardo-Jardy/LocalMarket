@@ -9,7 +9,8 @@ Future<dynamic> registerNegocio(
     String name,
     String pass,
     String email,
-    String location,
+    double latitud,
+    double longitud,
     int tipo,
     String referencia,
     String horasApertura,
@@ -25,7 +26,8 @@ Future<dynamic> registerNegocio(
       'user': name,
       'correo': email,
       'pass': pass,
-      'ubicacion': location,
+      'latitud': latitud.toString(),
+      'longitud': longitud.toString(),
       'tipo': tipo.toString(),
       'referencia': referencia,
       'horaApertura': horasApertura,
@@ -369,21 +371,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 ),
                                               );
                                             } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                      'Te uniste con exito'),
-                                                  backgroundColor: Colors.blue,
-                                                  duration:
-                                                      Duration(seconds: 3),
-                                                ),
-                                              );
+                                              List<String> splitLocation =
+                                                  _location.text.split('|');
+                                              debugPrint(splitLocation[0]);
                                               registerNegocio(
                                                   _name.text,
                                                   _pass.text,
                                                   _email.text,
-                                                  _location.text,
+                                                  double.parse(
+                                                      splitLocation[0]),
+                                                  double.parse(
+                                                      splitLocation[1]),
                                                   3,
                                                   _referencia.text,
                                                   _horasApertura.text,
@@ -397,6 +395,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       builder: (context) =>
                                                           Loggin()));
                                             }
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content:
+                                                    Text('Te uniste con exito'),
+                                                backgroundColor: Colors.blue,
+                                                duration: Duration(seconds: 3),
+                                              ),
+                                            );
                                           },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
@@ -624,6 +631,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                               });
                                               setState(() {
                                                 isVisible = !isVisible;
+                                              });
+                                              setState(() {
+                                                _location.text =
+                                                    "${_currentPosition?.latitude}|${_currentPosition?.longitude}";
                                               });
                                             }
                                           },

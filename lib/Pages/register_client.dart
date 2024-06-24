@@ -8,8 +8,8 @@ import 'dart:convert';
 import 'package:local_market/Pages/preferents.dart';
 
 //Logica de registro;
-Future<int> registerClient(String nombre, String correo, String ubicacion,
-    String pass, int tipo) async {
+Future<int> registerClient(String nombre, String correo, double latitud,
+    double longitud, String pass, int tipo) async {
   final response = await http.post(
     Uri.parse('http://localhost/API_local_market/registerClient.php'),
     headers: <String, String>{
@@ -19,7 +19,8 @@ Future<int> registerClient(String nombre, String correo, String ubicacion,
       'user': nombre,
       'correo': correo,
       'pass': pass,
-      'ubicacion': ubicacion,
+      'latitud': latitud.toString(),
+      'longitud': longitud.toString(),
       'tipo': tipo.toString()
     }),
   );
@@ -119,8 +120,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _registerAndNavigate() async {
     try {
+      List<String> splitLocation = _location.text.split('|');
       int userId = await registerClient(
-          _name.text, _email.text, _location.text, _pass.text, 2);
+          _name.text,
+          _email.text,
+          double.parse(splitLocation[0]),
+          double.parse(splitLocation[1]),
+          _pass.text,
+          2);
 
       Navigator.push(
         context,

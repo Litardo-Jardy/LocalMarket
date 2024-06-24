@@ -80,8 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final user = context.watch<StateSesion>();
     return Scaffold(
       backgroundColor: const Color.fromARGB(221, 245, 244, 244),
-      body: ListView(
-        children: [Center(
+      body: ListView(children: [
+        Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -176,18 +176,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                         duration: Duration(seconds: 3),
                                       ),
                                     );
-                                    // Latitude - Longitude
-                                    List<String> splitLocation =
-                                        data[4].split('|');
                                     user.setId(int.parse(data[
                                         0])); //Mandando el usuario que acabo de loggearse al estado global de la aplicacion;
                                     user.setName(data[1]);
                                     user.setCorreo(data[2]);
                                     user.setPass(data[3]);
-                                    user.setLatitude(splitLocation[0]);
-                                    user.setLongitude(splitLocation[1]);
-                                    user.setTipo(int.parse(data[5]));
-                                    user.setUrl(data[6]);
+                                    user.setLatitude(data[4]);
+                                    user.setLongitude(data[5]);
+                                    user.setTipo(int.parse(data[6]));
+                                    user.setUrl(data[7]);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -196,7 +193,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                        content: Text('Credenciales incorrectas'),
+                                        content:
+                                            Text('Credenciales incorrectas'),
                                         backgroundColor: Colors.red,
                                         duration: Duration(seconds: 3),
                                       ),
@@ -283,8 +281,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
-        ),]
-      ),
+        ),
+      ]),
     );
   }
 }
