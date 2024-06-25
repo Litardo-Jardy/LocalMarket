@@ -693,7 +693,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Loggin()));
+                                      builder: (context) => const Loggin()));
                             },
                             child: const Text(
                               'Inicia sesion',

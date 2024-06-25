@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:local_market/Pages/login.dart';
 import 'package:local_market/State/sesion.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
@@ -61,12 +63,15 @@ class _MyHomePageState extends State<MyHomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final user = context.read<StateSesion>();
       calculateRange(double.parse(user.latitude), double.parse(user.longitude));
-      _initialPosition =
-          LatLng(double.parse(user.latitude), double.parse(user.longitude));
+      setState(() {
+        _initialPosition =
+            LatLng(double.parse(user.latitude), double.parse(user.longitude));
+      });
       _markers.add(
         Marker(
           markerId: const MarkerId('initialMarker'),
-          position: _initialPosition,
+          position:
+              LatLng(double.parse(user.latitude), double.parse(user.longitude)),
           infoWindow: const InfoWindow(
             title: 'Tu',
             snippet: 'Esta es tu ubicacion actual.',
@@ -135,148 +140,203 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(221, 245, 244, 244),
-      body: ListView(
+      body: Stack(
         children: [
-          Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                Row(children: [
-                  const SizedBox(width: 18),
-                  SizedBox(
-                    width: 80,
-                    height: 80,
-                    child: ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(10), // Radio de la esquina
-                      child: user.url == 'null'
-                          ? Image.network(
-                              'https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png')
-                          : Image.network(user.url),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(user.name,
-                          style: const TextStyle(
-                              fontSize: 26,
-                              color: Colors.black,
-                              fontFamily: 'Poppins',
-                              letterSpacing: 1.5),
-                          textAlign: TextAlign.start),
-                      Text(user.correo,
-                          style: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.black,
-                              fontFamily: 'Poppins',
-                              letterSpacing: 1.5),
-                          textAlign: TextAlign.start),
-                    ],
-                  ),
-                ]),
-                const SizedBox(height: 40),
-                SizedBox(
-                  width: 330.0,
-                  child: TextField(
-                    controller: _query,
-                    decoration: InputDecoration(
-                      labelText: 'Buscar',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      prefixIcon: const Icon(Icons.search),
-                    ),
-                    style: const TextStyle(
-                      fontSize: 19.0,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 40),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 35.0),
-                    child: Text(
-                      "Recomendaciones",
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.black,
-                        fontFamily: 'Poppins',
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 30),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: negocios.map((negocio) {
-                      _markers.add(
-                        Marker(
-                          markerId: MarkerId(negocio[0]),
-                          position: LatLng(double.parse(negocio[3]),
-                              double.parse(negocio[4])),
-                          infoWindow: InfoWindow(
-                            title: negocio[0],
-                            snippet: negocio[5],
-                          ),
+          ListView(
+            children: [
+              Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 20),
+                    Row(children: [
+                      const SizedBox(width: 18),
+                      SizedBox(
+                        width: 80,
+                        height: 80,
+                        child: ClipRRect(
+                          borderRadius:
+                              BorderRadius.circular(10), // Radio de la esquina
+                          child: user.url == 'null'
+                              ? Image.network(
+                                  'https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png')
+                              : Image.network(user.url),
                         ),
-                      );
-                      return Container(
-                        margin: const EdgeInsets.only(
-                            right: 40), // Espaciado entre elementos
-                        child: Column(
-                          children: [
-                            const SizedBox(width: 20),
-                            SizedBox(
-                              width: 100,
-                              height: 120,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                    10), // Radio de la esquina
-                                child: negocio[2] == 'null'
-                                    ? const Image(
-                                        width: 182,
-                                        height: 180,
-                                        fit: BoxFit.cover,
-                                        image:
-                                            AssetImage('lib/assets/store.jpeg'))
-                                    : Image.network(negocio[2]),
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              negocio[0],
+                      ),
+                      const SizedBox(width: 20),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(user.name,
+                              style: const TextStyle(
+                                  fontSize: 26,
+                                  color: Colors.black,
+                                  fontFamily: 'Poppins',
+                                  letterSpacing: 1.5),
+                              textAlign: TextAlign.start),
+                          Text(user.correo,
                               style: const TextStyle(
                                   fontSize: 15,
                                   color: Colors.black,
-                                  fontFamily: 'Poppins'),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                                  fontFamily: 'Poppins',
+                                  letterSpacing: 1.5),
+                              textAlign: TextAlign.start),
+                        ],
+                      ),
+                    ]),
+                    const SizedBox(height: 40),
+                    SizedBox(
+                      width: 330.0,
+                      child: TextField(
+                        controller: _query,
+                        decoration: InputDecoration(
+                          labelText: 'Buscar',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          prefixIcon: const Icon(Icons.search),
                         ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                SizedBox(
-                  height: 300,
-                  child: GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: _initialPosition,
-                      zoom: 14,
+                        style: const TextStyle(
+                          fontSize: 19.0,
+                        ),
+                      ),
                     ),
-                    markers: _markers,
-                    myLocationEnabled: true,
-                    myLocationButtonEnabled: true,
-                  ),
+                    const SizedBox(height: 40),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 35.0),
+                        child: Text(
+                          "Recomendaciones",
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.black,
+                            fontFamily: 'Poppins',
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: negocios.map((negocio) {
+                          _markers.add(
+                            Marker(
+                              markerId: MarkerId(negocio[0]),
+                              position: LatLng(double.parse(negocio[3]),
+                                  double.parse(negocio[4])),
+                              infoWindow: InfoWindow(
+                                title: negocio[0],
+                                snippet: negocio[5],
+                              ),
+                            ),
+                          );
+                          return Container(
+                            margin: const EdgeInsets.only(right: 40),
+                            child: Column(
+                              children: [
+                                const SizedBox(width: 20),
+                                SizedBox(
+                                  width: 100,
+                                  height: 120,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        10), // Radio de la esquina
+                                    child: negocio[2] == 'null'
+                                        ? const Image(
+                                            width: 182,
+                                            height: 180,
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(
+                                                'lib/assets/store.jpeg'))
+                                        : Image.network(negocio[2]),
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  negocio[0],
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontFamily: 'Poppins'),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      height: 350,
+                      child: GoogleMap(
+                        onMapCreated: _onMapCreated,
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(double.parse(user.latitude),
+                              double.parse(user.longitude)),
+                          zoom: 15,
+                        ),
+                        markers: _markers,
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: true,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              width: double.infinity,
+              color: const Color(0xFFffca7b),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        size: 35,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Loggin(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.home,
+                        size: 35,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Loggin(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
