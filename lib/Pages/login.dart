@@ -14,7 +14,7 @@ Future<dynamic> validationUser(String user, String pass) async {
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(<String, String>{'user': user, 'pass': pass}),
+    body: jsonEncode(<String, String>{'user': user, 'pass': pass, 'id': "0"}),
   );
 
   try {
@@ -51,14 +51,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _user = TextEditingController();
   final TextEditingController _pass = TextEditingController();
+
   void _userLatestValue() {
     final value = _user.text;
-    debugPrint(value);
+    //debugPrint(value);
   }
 
   void _passLatestValue() {
     final value = _pass.text;
-    debugPrint(value);
+    //debugPrint(value);
   }
 
   @override
@@ -168,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 } else {
                                   List<String> data = await validationUser(
                                       _user.text, _pass.text);
-                                  if (data.isNotEmpty) {
+                                  if (int.parse(data[0]) > 0) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text('Se accedio con exito'),
@@ -176,8 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         duration: Duration(seconds: 3),
                                       ),
                                     );
-                                    user.setId(int.parse(data[
-                                        0])); //Mandando el usuario que acabo de loggearse al estado global de la aplicacion;
+                                    user.setId(int.parse(data[0]));
                                     user.setName(data[1]);
                                     user.setCorreo(data[2]);
                                     user.setPass(data[3]);

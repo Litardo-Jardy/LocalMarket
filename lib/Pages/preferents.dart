@@ -4,7 +4,30 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:local_market/State/sesion.dart';
+import 'package:provider/provider.dart';
+
 import 'package:local_market/Pages/dashboard.dart';
+
+Future<dynamic> validationUser(int id) async {
+  final response = await http.post(
+    Uri.parse('http://localhost/API_local_market/getUser.php'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(
+        <String, String>{'user': 'null', 'pass': 'pass', 'id': id.toString()}),
+  );
+
+  try {
+    final data = json.decode(response.body);
+    List<String> result = List<String>.from(data["user"][0]);
+    return result;
+  } catch (e) {
+    debugPrint("No se pudieron cargar los datos. Error: ${e.toString()}");
+    return [];
+  }
+}
 
 class Preferents extends StatelessWidget {
   final int usuarioId;
@@ -39,12 +62,23 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _query = TextEditingController();
-  List<String>? _items;
+  List<List<String>>? _items;
+  List<List<String>>? _itemsTwo;
   List<String> selects = [];
 
   void _userLatestValue() {
     final value = _query.text;
-    debugPrint(value);
+    if (value.length > 1) {
+      setState(() {
+        _items = List<List<String>>.from(_items!
+            .where((item) => item[0].contains(value))
+            .map((item) => List<String>.from(item)));
+      });
+    } else {
+      setState(() {
+        _items = _itemsTwo;
+      });
+    }
   }
 
   @override
@@ -70,8 +104,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
         if (data['categorys'] != null && data['categorys'] is List) {
           setState(() {
-            _items = List<String>.from(
-                data['categorys'].map((item) => item[0] as String));
+            _items = List<List<String>>.from(
+                data['categorys'].map((item) => List<String>.from(item)));
+
+            _itemsTwo = List<List<String>>.from(
+                data['categorys'].map((item) => List<String>.from(item)));
           });
         } else {
           throw Exception('Error al mostrar los datos');
@@ -108,6 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<StateSesion>();
     return Scaffold(
       backgroundColor: const Color.fromARGB(221, 245, 244, 244),
       body: Stack(
@@ -156,10 +194,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         spacing: 60,
                         runSpacing: 50,
                         children: _items?.map((e) {
-                              bool isSelected = selects.contains(e);
+                              bool isSelected = selects.contains(e[0]);
                               return GestureDetector(
                                 onTap: () {
-                                  onItemPressed(e);
+                                  onItemPressed(e[0]);
                                 },
                                 child: Column(
                                   children: [
@@ -173,7 +211,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                         color: isSelected
                                             ? Colors.green
-                                            : const Color(0xFFffca7b),
+                                            : const Color.fromARGB(
+                                                221, 245, 244, 244),
                                         borderRadius: BorderRadius.circular(50),
                                         boxShadow: [
                                           BoxShadow(
@@ -188,15 +227,29 @@ class _MyHomePageState extends State<MyHomePage> {
                                         width: 20,
                                         height: 20,
                                         child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                                10), // Radio de la esquina
-                                            child: Image.network(
-                                                'https://img.icons8.com/ios-filled/50/FF8B00/cocktail.png')),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: e[1] != 'null'
+                                              ? Image.network(
+                                                  e[1],
+                                                  errorBuilder: (context, error,
+                                                          stackTrace) =>
+                                                      const Icon(
+                                                          Icons.error_outline),
+                                                )
+                                              : Image.network(
+                                                  'https://img.icons8.com/ios-filled/50/FF8B00/cocktail.png',
+                                                  errorBuilder: (context, error,
+                                                          stackTrace) =>
+                                                      const Icon(
+                                                          Icons.error_outline),
+                                                ),
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      e,
+                                      e[0],
                                       style: const TextStyle(
                                         color: Color.fromARGB(255, 0, 0, 0),
                                         fontSize: 12,
@@ -225,7 +278,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 380,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 214, 162, 84),
+                    backgroundColor: Color(0xFFFF8B00),
                     foregroundColor: Colors.black87,
                     shadowColor: Colors.black,
                     elevation: 5,
@@ -236,16 +289,37 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     minimumSize: const Size(150, 50),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     for (var i = 0; i < selects.length; i++) {
                       addPreferens(selects[i]);
                     }
 
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Dashboard(),
-                        ));
+                    List<String> data = await validationUser(widget.usuarioId);
+
+                    if (data.isNotEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Se accedio con exito'),
+                          backgroundColor: Colors.blue,
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+
+                      user.setId(int.parse(data[0]));
+                      user.setName(data[1]);
+                      user.setCorreo(data[2]);
+                      user.setPass(data[3]);
+                      user.setLatitude(data[4]);
+                      user.setLongitude(data[5]);
+                      user.setTipo(int.parse(data[6]));
+                      user.setUrl(data[7]);
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Dashboard(),
+                          ));
+                    }
                   },
                   child: Text(
                     'Seleccionar (${selects.length})',
