@@ -148,9 +148,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     Row(children: [
-                      const SizedBox(width: 18),
+                      const SizedBox(width: 15),
                       SizedBox(
                         width: 80,
                         height: 80,
@@ -163,7 +163,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               : Image.network(user.url),
                         ),
                       ),
-                      const SizedBox(width: 20),
+                      const SizedBox(width: 17),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -184,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     ]),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 30),
                     SizedBox(
                       width: 330.0,
                       child: TextField(
@@ -201,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 25),
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
@@ -269,9 +269,24 @@ class _MyHomePageState extends State<MyHomePage> {
                         }).toList(),
                       ),
                     ),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 35.0),
+                        child: Text(
+                          "Negocios cerca de ti",
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.black,
+                            fontFamily: 'Poppins',
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 20),
                     SizedBox(
-                      height: 350,
+                      height: 330,
                       child: GoogleMap(
                         onMapCreated: _onMapCreated,
                         initialCameraPosition: CameraPosition(
@@ -284,6 +299,106 @@ class _MyHomePageState extends State<MyHomePage> {
                         myLocationButtonEnabled: true,
                       ),
                     ),
+                    const SizedBox(height: 10),
+                    //Tarjetas de negocios;
+                    Wrap(
+                        spacing: 40,
+                        runSpacing: 40,
+                        children: negocios.map((negocio) {
+                          return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 380,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: const Color(0xFFffca7b),
+                                      width: 1,
+                                    ),
+                                    color: const Color.fromARGB(
+                                        221, 255, 255, 255),
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        spreadRadius: 5,
+                                        blurRadius: 7,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Column(children: [
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Text(
+                                              negocio[0],
+                                              style: const TextStyle(
+                                                  fontSize: 25,
+                                                  color: Colors.black,
+                                                  fontFamily: 'Poppins',
+                                                  letterSpacing: 1.5),
+                                              textAlign: TextAlign.start,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Text(
+                                              negocio[8],
+                                              style: const TextStyle(
+                                                  fontSize: 17,
+                                                  color: Color(0xFFffca7b),
+                                                  fontFamily: 'Poppins',
+                                                  letterSpacing: 2),
+                                              textAlign: TextAlign.start,
+                                            ),
+                                          ),
+                                        ]),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    SizedBox(
+                                      width: 380,
+                                      height: 200,
+                                      child: negocio[9] != 'null'
+                                          ? Image.network(
+                                              negocio[9],
+                                              errorBuilder: (context, error,
+                                                      stackTrace) =>
+                                                  const Icon(
+                                                      Icons.error_outline),
+                                            )
+                                          : Image.network(
+                                              'https://img.icons8.com/ios-filled/50/FF8B00/cocktail.png',
+                                              errorBuilder: (context, error,
+                                                      stackTrace) =>
+                                                  const Icon(
+                                                      Icons.error_outline),
+                                            ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    SizedBox(
+                                      width: 380,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15),
+                                        child: Text(
+                                          negocio[5],
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                              fontFamily: 'Poppins',
+                                              letterSpacing: 2),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                      ),
+                                    )
+                                  ]),
+                                ),
+                              ]);
+                        }).toList()),
                   ],
                 ),
               ),
