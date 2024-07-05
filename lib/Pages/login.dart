@@ -1,13 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:local_market/Services/config.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:local_market/Pages/dashboard.dart';
 import 'package:local_market/State/sesion.dart';
 import 'initial_screen.dart';
 
 import 'dart:convert';
+
+//API calling:
+Future<dynamic> validationUser(String user, String pass) async {
+  final response = await http.post(
+    Uri.parse('${Config.apiKey}/getUser.php'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{'user': user, 'pass': pass, 'id': "0"}),
+  );
+
+  try {
+    final data = json.decode(response.body);
+    List<String> result = List<String>.from(data["user"][0]);
+    return result;
+  } catch (e) {
+    debugPrint("Error validate user: ${e.toString()}");
+    return [];
+  }
+}
 
 void main() {
   runApp(const Loggin());
@@ -89,49 +109,8 @@ class _Loggin extends State<Loggin> {
                             width: 350,
                             child: ElevatedButton(
                               onPressed: () async {
-                                if (_user.text.isEmpty || _pass.text.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Llene todos los campos'),
-                                      backgroundColor: Colors.red,
-                                      duration: Duration(seconds: 3),
-                                    ),
-                                  );
-                                } else {
-                                  List<String> data = await validationUser(
-                                      _user.text, _pass.text);
-                                  if (int.parse(data[0]) > 0) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Se accedio con exito'),
-                                        backgroundColor: Colors.blue,
-                                        duration: Duration(seconds: 3),
-                                      ),
-                                    );
-                                    user.setId(int.parse(data[0]));
-                                    user.setName(data[1]);
-                                    user.setCorreo(data[2]);
-                                    user.setPass(data[3]);
-                                    user.setLatitude(data[4]);
-                                    user.setLongitude(data[5]);
-                                    user.setTipo(int.parse(data[6]));
-                                    user.setUrl(data[7]);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Dashboard()));
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content:
-                                            Text('Credenciales incorrectas'),
-                                        backgroundColor: Colors.red,
-                                        duration: Duration(seconds: 3),
-                                      ),
-                                    );
-                                  }
-                                }
+                                validation(
+                                    _user.text, _pass.text, context, user);
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFFffca7b),
@@ -245,24 +224,44 @@ class CustomField extends StatelessWidget {
 }
 
 //Functions:
-void validation(String user, String pass) {}
-
-//API calling:
-Future<dynamic> validationUser(String user, String pass) async {
-  final response = await http.post(
-    Uri.parse('${dotenv.env['API_KEY']}/getUser.php'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{'user': user, 'pass': pass, 'id': "0"}),
-  );
-
-  try {
-    final data = json.decode(response.body);
-    List<String> result = List<String>.from(data["user"][0]);
-    return result;
-  } catch (e) {
-    debugPrint("Error validate user: ${e.toString()}");
-    return [];
+void validation(String usert, String pass, context, user) async {
+  debugPrint('http://localhost/API_local_market/getUser.php');
+  if (usert.isEmpty || pass.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Llene todos los campos'),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+      ),
+    );
+  } else {
+    List<String> data = await validationUser(usert, pass);
+    if (int.parse(data[0]) > 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Se accedio con exito'),
+          backgroundColor: Colors.blue,
+          duration: Duration(seconds: 3),
+        ),
+      );
+      user.setId(int.parse(data[0]));
+      user.setName(data[1]);
+      user.setCorreo(data[2]);
+      user.setPass(data[3]);
+      user.setLatitude(data[4]);
+      user.setLongitude(data[5]);
+      user.setTipo(int.parse(data[6]));
+      user.setUrl(data[7]);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const Dashboard()));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Credenciales incorrectas'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
 }

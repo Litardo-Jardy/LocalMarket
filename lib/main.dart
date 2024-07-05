@@ -7,7 +7,7 @@ import 'Pages/register_client.dart';
 import 'Pages/initial_screen.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   runApp(const Main());
 }
 
