@@ -1,72 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'package:local_market/Pages/dashboard.dart';
 import 'package:local_market/State/sesion.dart';
 import 'initial_screen.dart';
-import 'package:provider/provider.dart';
 
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-//Llama a al metodo getUser de la base de datos el cual devuelve todos los datos de el usuario si es ecnontrado;
-Future<dynamic> validationUser(String user, String pass) async {
-  final response = await http.post(
-    Uri.parse('http://localhost/API_local_market/getUser.php'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{'user': user, 'pass': pass, 'id': "0"}),
-  );
-
-  try {
-    final data = json.decode(response.body);
-    List<String> result = List<String>.from(data["user"][0]);
-    return result;
-  } catch (e) {
-    debugPrint("No se pudieron cargar los datos. Error: ${e.toString()}");
-    return [];
-  }
-}
 
 void main() {
   runApp(const Loggin());
 }
 
-class Loggin extends StatelessWidget {
+class Loggin extends StatefulWidget {
   const Loggin({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MyHomePage(title: 'Local Market');
-  }
+  State<Loggin> createState() => _Loggin();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _Loggin extends State<Loggin> {
   final TextEditingController _user = TextEditingController();
   final TextEditingController _pass = TextEditingController();
-
-  void _userLatestValue() {
-    final value = _user.text;
-    //debugPrint(value);
-  }
-
-  void _passLatestValue() {
-    final value = _pass.text;
-    //debugPrint(value);
-  }
 
   @override
   void initState() {
     super.initState();
-    _user.addListener(_userLatestValue);
-    _pass.addListener(_passLatestValue);
   }
 
   @override
@@ -87,6 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
+                //Logo and button;
                 width: 370,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,39 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            width: 350.0,
-                            child: TextField(
-                              controller: _user,
-                              decoration: InputDecoration(
-                                labelText: 'Usuario',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(35),
-                                ),
-                                prefixIcon: const Icon(Icons.person),
-                              ),
-                              style: const TextStyle(
-                                fontSize: 22.0,
-                              ),
-                            ),
-                          ),
+                          CustomField(controller: _user, label: "Usuario"),
                           const SizedBox(height: 50.0),
-                          SizedBox(
-                            width: 350,
-                            child: TextField(
-                              controller: _pass,
-                              decoration: InputDecoration(
-                                labelText: 'Contraseña',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(35),
-                                ),
-                                prefixIcon: const Icon(Icons.lock),
-                              ),
-                              style: const TextStyle(
-                                fontSize: 22.0,
-                              ),
-                            ),
-                          ),
+                          CustomField(controller: _pass, label: "Contraseña"),
                           const SizedBox(height: 45.0),
                           SizedBox(
                             width: 350,
@@ -284,5 +215,54 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ]),
     );
+  }
+}
+
+class CustomField extends StatelessWidget {
+  final TextEditingController controller;
+  final String label;
+  const CustomField({super.key, required this.controller, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 350.0,
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(35),
+          ),
+          prefixIcon: const Icon(Icons.person),
+        ),
+        style: const TextStyle(
+          fontSize: 22.0,
+        ),
+      ),
+    );
+  }
+}
+
+//Functions:
+void validation(String user, String pass) {}
+
+//API calling:
+Future<dynamic> validationUser(String user, String pass) async {
+  final response = await http.post(
+    Uri.parse('${dotenv.env['API_KEY']}/getUser.php'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{'user': user, 'pass': pass, 'id': "0"}),
+  );
+
+  try {
+    final data = json.decode(response.body);
+    List<String> result = List<String>.from(data["user"][0]);
+    return result;
+  } catch (e) {
+    debugPrint("Error validate user: ${e.toString()}");
+    return [];
   }
 }

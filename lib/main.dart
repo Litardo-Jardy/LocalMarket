@@ -23,7 +23,7 @@ class Main extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         routes: {
-          '/Login': (context) => Loggin(),
+          '/Login': (context) => const Loggin(),
           '/ClienteRe': (context) => const RegisterCliente(),
           '/NegocioRe': (context) => const RegisterNegocio(),
           '/Dashboard': (context) => const Dashboard(),
