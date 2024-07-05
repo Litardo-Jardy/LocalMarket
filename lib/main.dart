@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:local_market/Pages/dashboard.dart';
 import 'State/sesion.dart';
-import 'Pages/login.dart';
-import 'Pages/register_negocio.dart';
-import 'Pages/register_client.dart';
-import 'Pages/initial_screen.dart';
+import 'Pages/Login/login.dart';
+import 'Pages/Register/register_negocio.dart';
+import 'Pages/Register/register_client.dart';
+import 'Pages/Initial/initial_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
