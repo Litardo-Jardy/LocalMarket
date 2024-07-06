@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:local_market/Services/config.dart';
 
 Future<dynamic> registerNegocio(
     String name,
@@ -15,7 +16,7 @@ Future<dynamic> registerNegocio(
     String descripcion,
     String? categoria) async {
   await http.post(
-    Uri.parse('http://localhost/API_local_market/registerNegocio.php'),
+    Uri.parse('${Config.apiKey}/registerNegocio.php'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -37,8 +38,8 @@ Future<dynamic> registerNegocio(
 
 Future<void> categorys(Function updateCategorys) async {
   try {
-    final response = await http
-        .get(Uri.parse('http://localhost/API_local_market/getCategorys.php'));
+    final response =
+        await http.get(Uri.parse('${Config.apiKey}/getCategorys.php'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

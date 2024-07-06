@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:local_market/Pages/dashboard.dart';
+import 'package:local_market/Pages/Dashboard/dashboard.dart';
 import 'State/sesion.dart';
 import 'Pages/Login/login.dart';
 import 'Pages/Register/register_negocio.dart';

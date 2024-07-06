@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:local_market/State/sesion.dart';
 import 'package:provider/provider.dart';
 
-import 'package:local_market/Pages/dashboard.dart';
+import 'package:local_market/Pages/Dashboard/dashboard.dart';
 
 Future<dynamic> validationUser(int id) async {
   final response = await http.post(

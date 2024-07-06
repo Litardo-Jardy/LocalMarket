@@ -3,6 +3,26 @@ import 'package:local_market/Pages/Login/login.dart';
 import 'package:local_market/Pages/Register/api_register_negocio.dart';
 import 'package:geolocator/geolocator.dart';
 
+///Funcion que aplica los filtros en los inputs para las validaciones antes de crear un negocio.
+///
+///Luego de haber pasado todos los filtros esta funcion tambien hace hace una llamada a la API para
+///crear el negocio con los datos proporcionados de los inputs.
+///
+///**name**: nombre del negocio.
+///
+///**pass**: contraseña del negocio.
+///
+///**email**: email del negocio.
+///
+///**descripcion**: descripcion del negocio.
+///
+///**horasApertura*: horas de apertura del negocio.
+///
+///**context**: contexto actual.
+///
+///**diasApertura**: dias de apertura del negocio.
+///
+///**selectedItem**: categoria del negocio.
 void validationNegocio(
     String name,
     String email,
@@ -60,6 +80,21 @@ void validationNegocio(
   );
 }
 
+///Funcion que aplica los filtros en los inputs para las validaciones antes de continuar en la creacion de un negocio
+///
+///**name**: nombre del negocio
+///
+///**pass**: contraseña del negocio
+///
+///**email**: email del negocio
+///
+///**confirPass**: confirmacion de la contraseña
+///
+///**location**: localizacion del negocio
+///
+///**context**: contexto actual
+///
+///**updateState**: funcion que actualizar el estado de la localizacion en el widget principal
 void validationPersonNegocio(String name, String email, String pass,
     String confirPass, context, Function updateState) async {
   bool serviceEnabled;

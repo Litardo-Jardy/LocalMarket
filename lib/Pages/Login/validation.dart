@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_market/Pages/Login/api_validation.dart';
-import 'package:local_market/Pages/dashboard.dart';
+import 'package:local_market/Pages/Dashboard/dashboard.dart';
 
 ///Funcion que se encarga de instanciar los datos del usuario en la sesion actual.
 ///
