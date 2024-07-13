@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:local_market/Services/button.dart';
 
 class ProductsCard extends StatelessWidget {
   final List<List<String>> products;
+  final TextEditingController query;
 
-  const ProductsCard({super.key, required this.products});
+  const ProductsCard({super.key, required this.products, required this.query});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        CustomField(
+            controller: query, label: "Busacr", icon: const Icon(Icons.search)),
+        const SizedBox(height: 20),
         const Align(
           alignment: Alignment.centerLeft,
           child: Padding(
@@ -26,13 +31,12 @@ class ProductsCard extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         SizedBox(
-          width: 150,
+          width: 350,
           child: ElevatedButton(
             onPressed: () {
               //redirect to create new products;
             },
             style: ElevatedButton.styleFrom(
-              foregroundColor: const Color.fromARGB(221, 112, 221, 69),
               elevation: 5,
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 23),
               minimumSize: const Size(150, 50),
@@ -40,14 +44,15 @@ class ProductsCard extends StatelessWidget {
             child: const Text(
               "+ Agregar nuevo producto",
               style: TextStyle(
-                color: Colors.white,
-                fontSize: 25.0,
+                color: Color.fromARGB(221, 112, 221, 69),
+                fontSize: 20,
                 letterSpacing: 1,
                 fontStyle: FontStyle.italic,
               ),
             ),
           ),
         ),
+        const SizedBox(height: 15),
         Wrap(
             spacing: 60,
             runSpacing: 50,
@@ -59,8 +64,8 @@ class ProductsCard extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      width: 100,
-                      height: 120,
+                      width: 140,
+                      height: 160,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: const Color(0xFFffca7b),
@@ -78,8 +83,8 @@ class ProductsCard extends StatelessWidget {
                         ],
                       ),
                       child: SizedBox(
-                        width: 60,
-                        height: 60,
+                        width: 100,
+                        height: 100,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
                           child: e[1] != 'null'
@@ -99,6 +104,7 @@ class ProductsCard extends StatelessWidget {
                     const SizedBox(height: 5),
                     Text(
                       e[0],
+                      textAlign: TextAlign.start,
                       style: const TextStyle(
                         color: Color.fromARGB(255, 0, 0, 0),
                         fontSize: 12,

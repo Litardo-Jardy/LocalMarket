@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:local_market/Pages/Dashboard/productos_card.dart';
-import 'package:local_market/Services/button.dart';
 import 'package:local_market/Services/nav_bar.dart';
 import 'package:local_market/State/sesion.dart';
 import 'package:provider/provider.dart';
@@ -119,75 +118,25 @@ class _DashboardNegocio extends State<DashboardNegocio> {
                       ),
                     ),
                     const SizedBox(height: 25),
-                    Row(
+                    const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Column(children: [
-                            GestureDetector(
-                              onTap: () {
-                                //Funcion;
-                              },
-                              child: Container(
-                                  width: 70,
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                    color: const Color(0xFFffca7b),
-                                    width: 1,
-                                  )),
-                                  color: const Color.fromARGB(255, 17, 49, 228),
-                                  child: const Icon(Icons.business_sharp)),
-                            ),
-                            const Text("Mi negocio")
-                          ]),
-                          Column(children: [
-                            GestureDetector(
-                              onTap: () {
-                                //Funcion;
-                              },
-                              child: Container(
-                                  width: 70,
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                    color: const Color(0xFFffca7b),
-                                    width: 1,
-                                  )),
-                                  color: const Color.fromARGB(255, 17, 49, 228),
-                                  child: const Icon(
-                                      Icons.production_quantity_limits)),
-                            ),
-                            const Text("Mis productos")
-                          ]),
-                          Column(children: [
-                            GestureDetector(
-                              onTap: () {
-                                //Funcion;
-                              },
-                              child: Container(
-                                  width: 70,
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                    color: const Color(0xFFffca7b),
-                                    width: 1,
-                                  )),
-                                  color: const Color.fromARGB(255, 17, 49, 228),
-                                  child: const Icon(Icons.business_sharp)),
-                            ),
-                            const Text("Mis reservas")
-                          ]),
+                          Options(
+                              name: "Mi negocio",
+                              icon: Icon(Icons.business_sharp)),
+                          Options(
+                              name: "Mis productos",
+                              icon: Icon(Icons.production_quantity_limits)),
+                          Options(
+                              name: "Mis reservas",
+                              icon: Icon(Icons.business_sharp)),
                         ]),
-                    const SizedBox(height: 20),
-                    CustomField(
-                        controller: _query,
-                        label: "Busacr",
-                        icon: const Icon(Icons.search)),
                     const SizedBox(height: 20),
                     ProductsCard(
                         products: List<List<String>>.from(productos
                             .where((item) => int.parse(item[2]) == user.id)
-                            .map((item) => List<String>.from(item))))
+                            .map((item) => List<String>.from(item))),
+                        query: _query)
                   ],
                 ),
               ),
@@ -199,5 +148,41 @@ class _DashboardNegocio extends State<DashboardNegocio> {
         ],
       ),
     );
+  }
+}
+
+class Options extends StatelessWidget {
+  final String name;
+  final Icon icon;
+  //final Function function;
+
+  const Options({
+    super.key,
+    required this.name,
+    required this.icon,
+    //required this.function
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      GestureDetector(
+        onTap: () {
+          //Function;
+        },
+        child: Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                border: Border.all(
+                  color: const Color.fromARGB(255, 40, 125, 223),
+                  width: 1,
+                ),
+                color: const Color.fromARGB(255, 40, 125, 223)),
+            child: icon),
+      ),
+      Text(name)
+    ]);
   }
 }
