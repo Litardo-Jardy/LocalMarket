@@ -22,6 +22,7 @@ class Negocioscard extends StatelessWidget {
           List<List<String>> upProductos = List<List<String>>.from(productos
               .where((item) => int.parse(item[2]) == int.parse(negocio[10]))
               .map((item) => List<String>.from(item)));
+
           return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Container(
               width: 390,

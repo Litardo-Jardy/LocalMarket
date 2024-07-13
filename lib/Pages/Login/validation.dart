@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:local_market/Pages/Dashboard/dashboard_negocio.dart';
 import 'package:local_market/Pages/Login/api_validation.dart';
 import 'package:local_market/Pages/Dashboard/dashboard.dart';
 
@@ -39,8 +40,14 @@ void validation(String usert, String pass, context, user) async {
       user.setLongitude(data[5]);
       user.setTipo(int.parse(data[6]));
       user.setUrl(data[7]);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Dashboard()));
+      debugPrint(data[6]);
+      if (int.parse(data[6]) == 3) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const DashboardNegocio()));
+      } else {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const Dashboard()));
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

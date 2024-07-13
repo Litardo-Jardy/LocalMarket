@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_market/Pages/Dashboard/negocios_card.dart';
 import 'package:local_market/Pages/Dashboard/negocios_mini_card.dart';
+import 'package:local_market/Services/button.dart';
 import 'package:local_market/Services/maps.dart';
 import 'package:local_market/Services/nav_bar.dart';
 import 'package:local_market/State/sesion.dart';
@@ -34,16 +35,10 @@ class _Dashboard extends State<Dashboard> {
   LatLng _initialPosition = LatLng(0, 0);
   final Set<Marker> _markers = {};
 
-  void _userLatestValue() {
-    final value = _query.text;
-    debugPrint(value);
-  }
-
   @override
   void initState() {
     super.initState();
     getProductos();
-    _query.addListener(_userLatestValue);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final user = context.read<StateSesion>();
       calculateRange(double.parse(user.latitude), double.parse(user.longitude));
@@ -75,6 +70,7 @@ class _Dashboard extends State<Dashboard> {
     _query.dispose();
   }
 
+  ///Esta funcion que hace una llamada a la API y devuelve todos los productos almacenados en la base de datos.
   Future<dynamic> getProductos() async {
     final response = await http
         .get(Uri.parse('http://localhost/API_local_market/getProducto.php'));
@@ -87,6 +83,15 @@ class _Dashboard extends State<Dashboard> {
     });
   }
 
+  ///Esta funcion hace una llamada a la API y devuelve una lista de los negocios que se encuentren en el rango definido.
+  ///
+  ///**nlatitud**: limite norte de la latitud.
+  ///
+  ///**slatitude**: limite sur de la latitud.
+  ///
+  ///**nlongitud**:limite oeste de la longitud.
+  ///
+  ///**slongitud**: limite éste de la longitud.
   Future<dynamic> getNegocios(double nlatitud, double slatitud,
       double nlongitud, double slongitud) async {
     final response = await http.post(
@@ -114,6 +119,8 @@ class _Dashboard extends State<Dashboard> {
     }
   }
 
+  ///Esta funcion se encarga de calcular un rango predeterminado sea (5km, 10km, 20km) ala rendonda
+  ///tomando como punto de partida [longitude] y [latitude].
   void calculateRange(double latitude, double longitude) {
     int distanceKm = 10;
     int worldRadio = 6371;
@@ -130,6 +137,7 @@ class _Dashboard extends State<Dashboard> {
     getNegocios(latNorth, latSouth, longEast, longWest);
   }
 
+  ///Esta funcion sirve para agregar mas elementos a lista de _markers.
   void updateMarkers(list) {
     setState(() {
       _markers.add(list);
@@ -254,22 +262,12 @@ class _Dashboard extends State<Dashboard> {
                         markers: _markers),
 
                     const SizedBox(height: 20),
-                    SizedBox(
-                      width: 360.0,
-                      child: TextField(
+
+                    CustomField(
                         controller: _query,
-                        decoration: InputDecoration(
-                          labelText: 'Buscar',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          prefixIcon: const Icon(Icons.search),
-                        ),
-                        style: const TextStyle(
-                          fontSize: 19.0,
-                        ),
-                      ),
-                    ),
+                        label: "Busacr",
+                        icon: const Icon(Icons.search)),
+
                     const SizedBox(height: 20),
 
                     //----Tarjetas de negocios;
