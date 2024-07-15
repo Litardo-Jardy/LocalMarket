@@ -264,6 +264,7 @@ class _Dashboard extends State<Dashboard> {
                     const SizedBox(height: 20),
 
                     CustomField(
+                        size: 350,
                         controller: _query,
                         label: "Busacr",
                         icon: const Icon(Icons.search)),

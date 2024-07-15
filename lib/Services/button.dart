@@ -4,6 +4,7 @@ class CustomField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final Icon icon;
+  final double size;
 
   ///Inputs perzonalizados.
   ///
@@ -14,6 +15,7 @@ class CustomField extends StatelessWidget {
   ///**icon**: hace referencia al icono del input
   const CustomField(
       {super.key,
+      required this.size,
       required this.controller,
       required this.label,
       required this.icon});
@@ -21,7 +23,7 @@ class CustomField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 350.0,
+      width: size,
       child: TextField(
         controller: controller,
         decoration: InputDecoration(

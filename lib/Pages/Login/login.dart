@@ -79,11 +79,13 @@ class _Loggin extends State<Loggin> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CustomField(
+                              size: 350,
                               controller: _user,
                               label: "Usuario",
                               icon: const Icon(Icons.person)),
                           const SizedBox(height: 50.0),
                           CustomField(
+                              size: 350,
                               controller: _pass,
                               label: "Contraseña",
                               icon: const Icon(Icons.lock)),

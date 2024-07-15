@@ -11,24 +11,25 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => StateSesion(),
-      child: const DashboardNegocio(),
+      child: const NewProducts(),
     ),
   );
 }
 
-class DashboardNegocio extends StatefulWidget {
-  const DashboardNegocio({super.key});
+class NewProducts extends StatefulWidget {
+  const NewProducts({super.key});
 
   @override
-  State<DashboardNegocio> createState() => _DashboardNegocio();
+  State<NewProducts> createState() => _NewProducts();
 }
 
-class _DashboardNegocio extends State<DashboardNegocio> {
+class _NewProducts extends State<NewProducts> {
   final TextEditingController name = TextEditingController();
   final TextEditingController precio = TextEditingController();
   final TextEditingController descripcion = TextEditingController();
   final TextEditingController oferta = TextEditingController();
   final TextEditingController imagen = TextEditingController();
+  String image = '';
 
   @override
   void initState() {
@@ -50,20 +51,54 @@ class _DashboardNegocio extends State<DashboardNegocio> {
     final user = context.watch<StateSesion>();
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(221, 245, 244, 244),
+      backgroundColor: const Color.fromRGBO(245, 244, 244, 0.867),
       body: Stack(
         children: [
-          ListView(
-            children: [
-              Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+          Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  "Agregar nuevo producto",
+                  style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                      letterSpacing: 1),
+                ),
+                const SizedBox(width: 40),
+                //Colcar codigo para agregar imagen del producto
+                const SizedBox(width: 40),
+                CustomField(
+                    size: 350,
+                    controller: name,
+                    label: "Nombre de producto",
+                    icon: const Icon(Icons.payment)),
+                const SizedBox(width: 20),
+                CustomField(
+                    size: 350,
+                    controller: descripcion,
+                    label: "Descripcion de producto",
+                    icon: const Icon(Icons.book)),
+                const SizedBox(width: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    // CustomField(controller: name, label: "Nombre de producto")
+                    CustomField(
+                        size: 150,
+                        controller: precio,
+                        label: "Precio ",
+                        icon: const Icon(Icons.book)),
+                    CustomField(
+                        size: 150,
+                        controller: oferta,
+                        label: "Oferta",
+                        icon: const Icon(Icons.book)),
                   ],
                 ),
-              ),
-            ],
+                //Colocar validacion de los campos y imagen del nuevo producto
+              ],
+            ),
           ),
 
           //----Barra de redirecciones;
@@ -71,41 +106,5 @@ class _DashboardNegocio extends State<DashboardNegocio> {
         ],
       ),
     );
-  }
-}
-
-class Options extends StatelessWidget {
-  final String name;
-  final Icon icon;
-  //final Function function;
-
-  const Options({
-    super.key,
-    required this.name,
-    required this.icon,
-    //required this.function
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: [
-      GestureDetector(
-        onTap: () {
-          //Function;
-        },
-        child: Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                border: Border.all(
-                  color: const Color.fromARGB(255, 40, 125, 223),
-                  width: 1,
-                ),
-                color: const Color.fromARGB(255, 40, 125, 223)),
-            child: icon),
-      ),
-      Text(name)
-    ]);
   }
 }

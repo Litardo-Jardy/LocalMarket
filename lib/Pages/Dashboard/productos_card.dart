@@ -12,7 +12,10 @@ class ProductsCard extends StatelessWidget {
     return Column(
       children: [
         CustomField(
-            controller: query, label: "Busacr", icon: const Icon(Icons.search)),
+            size: 350,
+            controller: query,
+            label: "Buscar",
+            icon: const Icon(Icons.search)),
         const SizedBox(height: 20),
         const Align(
           alignment: Alignment.centerLeft,

@@ -83,26 +83,31 @@ class _RegisterCliente extends State<RegisterCliente> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CustomField(
+                              size: 350,
                               controller: _name,
                               label: "Nombre de usuario",
                               icon: const Icon(Icons.person)),
                           const SizedBox(height: 50.0),
                           CustomField(
+                              size: 350,
                               controller: _email,
                               label: "Email",
                               icon: const Icon(Icons.email)),
                           const SizedBox(height: 50.0),
                           CustomField(
+                              size: 350,
                               controller: _location,
                               label: "Ubicacion",
                               icon: const Icon(Icons.location_city)),
                           const SizedBox(height: 50.0),
                           CustomField(
+                              size: 350,
                               controller: _pass,
                               label: "Contraseña",
                               icon: const Icon(Icons.lock)),
                           const SizedBox(height: 50.0),
                           CustomField(
+                              size: 350,
                               controller: _confirPass,
                               label: "Confirmar contraseña",
                               icon: const Icon(Icons.lock)),

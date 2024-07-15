@@ -147,22 +147,26 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                       ),
                                       const SizedBox(height: 50.0),
                                       CustomField(
+                                          size: 350,
                                           controller: _referencia,
                                           label: 'Referencia',
                                           icon: const Icon(Icons.route)),
                                       const SizedBox(height: 50.0),
                                       CustomField(
+                                          size: 350,
                                           controller: _horasApertura,
                                           label: 'Horas de apertura',
                                           icon: const Icon(Icons.timer)),
                                       const SizedBox(height: 50.0),
                                       CustomField(
+                                          size: 350,
                                           controller: _diasApertura,
                                           label: 'Dias de apertura',
                                           icon: const Icon(
                                               Icons.calendar_view_day)),
                                       const SizedBox(height: 50.0),
                                       CustomField(
+                                          size: 350,
                                           controller: _descripcion,
                                           label: 'Descripcion',
                                           icon: const Icon(Icons.wordpress)),
@@ -219,27 +223,32 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                     children: <Widget>[
                                       const SizedBox(height: 40.0),
                                       CustomField(
+                                          size: 350,
                                           controller: _name,
                                           label: 'Nombre de usuario',
                                           icon: const Icon(Icons.person)),
                                       const SizedBox(height: 50.0),
                                       CustomField(
+                                          size: 350,
                                           controller: _email,
                                           label: 'Email',
                                           icon: const Icon(Icons.email)),
                                       const SizedBox(height: 50.0),
                                       CustomField(
+                                          size: 350,
                                           controller: _location,
                                           label: 'Ubicacion',
                                           icon:
                                               const Icon(Icons.location_city)),
                                       const SizedBox(height: 50.0),
                                       CustomField(
+                                          size: 350,
                                           controller: _pass,
                                           label: 'Contraseña',
                                           icon: const Icon(Icons.lock)),
                                       const SizedBox(height: 50.0),
                                       CustomField(
+                                          size: 350,
                                           controller: _confirPass,
                                           label: ' Contraseña',
                                           icon: const Icon(Icons.lock)),
