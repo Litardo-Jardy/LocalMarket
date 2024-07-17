@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class StateSesion with ChangeNotifier {
   int _id = 0;
   int _tipo = 0;
+  int _idnegocio = 0;
   String _name = '';
   String _correo = '';
   String _pass = '';
@@ -12,6 +13,7 @@ class StateSesion with ChangeNotifier {
 
   int get id => _id;
   int get tipo => _tipo;
+  int get idnegocio => _idnegocio;
   String get name => _name;
   String get correo => _correo;
   String get url => _url;
@@ -56,6 +58,11 @@ class StateSesion with ChangeNotifier {
 
   void setLatitude(String latitude) {
     _latitude = latitude;
+    notifyListeners();
+  }
+
+  void setIdnegocio(int id) {
+    _idnegocio = id;
     notifyListeners();
   }
 }

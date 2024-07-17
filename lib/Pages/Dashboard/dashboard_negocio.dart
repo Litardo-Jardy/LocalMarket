@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_market/Pages/Dashboard/productos_card.dart';
+import 'package:local_market/Pages/Products/create_products.dart';
 import 'package:local_market/Services/nav_bar.dart';
 import 'package:local_market/State/sesion.dart';
 import 'package:provider/provider.dart';
@@ -123,12 +124,15 @@ class _DashboardNegocio extends State<DashboardNegocio> {
                         children: [
                           Options(
                               name: "Mi negocio",
+                              route: 1,
                               icon: Icon(Icons.business_sharp)),
                           Options(
                               name: "Mis productos",
+                              route: 2,
                               icon: Icon(Icons.production_quantity_limits)),
                           Options(
                               name: "Mis reservas",
+                              route: 3,
                               icon: Icon(Icons.business_sharp)),
                         ]),
                     const SizedBox(height: 20),
@@ -154,21 +158,33 @@ class _DashboardNegocio extends State<DashboardNegocio> {
 class Options extends StatelessWidget {
   final String name;
   final Icon icon;
+  final int route;
   //final Function function;
 
-  const Options({
-    super.key,
-    required this.name,
-    required this.icon,
-    //required this.function
-  });
+  const Options(
+      {super.key, required this.name, required this.icon, required this.route
+      //required this.function
+      });
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       GestureDetector(
         onTap: () {
-          //Function;
+          switch (route) {
+            case 1:
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const NewProducts()));
+              break;
+            case 2:
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const NewProducts()));
+              break;
+            case 3:
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const NewProducts()));
+              break;
+          }
         },
         child: Container(
             width: 80,
