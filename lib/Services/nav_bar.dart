@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:local_market/Pages/Dashboard/dashboard.dart';
+import 'package:local_market/Pages/Dashboard/dashboard_negocio.dart';
 import 'package:local_market/Pages/Login/login.dart';
 
 class Navbar extends StatelessWidget {
+  final int tipe;
+
   ///Navbar que permite la redireccion hacia a las diferentes secciones de la aplicacion.
-  const Navbar({super.key});
+  const Navbar({super.key, required this.tipe});
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +48,19 @@ class Navbar extends StatelessWidget {
                   color: Color.fromARGB(255, 255, 255, 255),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Loggin(),
-                    ),
-                  );
+                  tipe == 3
+                      ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DashboardNegocio(),
+                          ),
+                        )
+                      : Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Dashboard(),
+                          ),
+                        );
                 },
               ),
             ),

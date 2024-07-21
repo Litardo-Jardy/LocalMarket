@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:local_market/Pages/Products/create_products.dart';
 import 'package:local_market/Services/button.dart';
 
 class ProductsCard extends StatelessWidget {
@@ -37,7 +38,8 @@ class ProductsCard extends StatelessWidget {
           width: 350,
           child: ElevatedButton(
             onPressed: () {
-              //redirect to create new products;
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const NewProducts()));
             },
             style: ElevatedButton.styleFrom(
               elevation: 5,
@@ -62,72 +64,109 @@ class ProductsCard extends StatelessWidget {
             children: products.map((e) {
               return GestureDetector(
                 onTap: () {
-                  //Funciton for redirect;
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NewProducts()));
                 },
-                child: Column(
-                  children: [
-                    Container(
-                      width: 140,
-                      height: 160,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: const Color(0xFFffca7b),
-                          width: 1,
-                        ),
-                        color: const Color.fromARGB(255, 88, 166, 230),
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: const Offset(0, 3),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color.fromARGB(255, 255, 255, 255)
+                            .withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  width: 330,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        child: SizedBox(
+                          child: ClipOval(
+                            child: e[1] != 'null'
+                                ? Image.network(
+                                    e[1],
+                                    width: 120,
+                                    height: 120,
+                                    fit: BoxFit.fill,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const Icon(Icons.error_outline),
+                                  )
+                                : Image.network(
+                                    width: 120,
+                                    height: 120,
+                                    fit: BoxFit.fill,
+                                    e[1],
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const Icon(Icons.error_outline),
+                                  ),
                           ),
-                        ],
-                      ),
-                      child: SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: e[1] != 'null'
-                              ? Image.network(
-                                  e[1],
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      const Icon(Icons.error_outline),
-                                )
-                              : Image.network(
-                                  'https://img.icons8.com/ios-filled/50/FF8B00/cocktail.png',
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      const Icon(Icons.error_outline),
-                                ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      e[0],
-                      textAlign: TextAlign.start,
-                      style: const TextStyle(
-                        color: Color.fromARGB(255, 0, 0, 0),
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
-                        letterSpacing: 1.5,
+                      const SizedBox(width: 5),
+                      SizedBox(
+                        width: 180,
+                        child: Column(
+                          children: [
+                            Text(
+                              e[0],
+                              textAlign: TextAlign.start,
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.normal,
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              e[4],
+                              textAlign: TextAlign.start,
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              textAlign: TextAlign.start,
+                              "Precio: ${e[3]}",
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              "Oferta: ${e[5]}",
+                              textAlign: TextAlign.start,
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      e[3],
-                      style: const TextStyle(
-                        color: Color.fromARGB(255, 0, 0, 0),
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             }).toList()),

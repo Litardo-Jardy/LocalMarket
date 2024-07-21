@@ -61,8 +61,8 @@ class StateSesion with ChangeNotifier {
     notifyListeners();
   }
 
-  void setIdnegocio(int id) {
-    _idnegocio = id;
+  void setIdnegocio(int ids) {
+    _idnegocio = ids;
     notifyListeners();
   }
 }

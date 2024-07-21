@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:local_market/Pages/Products/api_create_product.dart';
 import 'package:local_market/Pages/Products/create_products.dart';
 
 void validationProducts(String name, String descripcion, double precio,
-    String oferta, String url, int negocio, context) {
+    String oferta, String url, int negocio, bool isImagen, context) {
   if (name.isEmpty ||
       descripcion.isEmpty ||
-      (precio == 0) ||
+      precio <= 0 ||
       oferta.isEmpty ||
       url.isEmpty) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -13,6 +14,14 @@ void validationProducts(String name, String descripcion, double precio,
         content: Text('Llene todos los campos'),
         backgroundColor: Colors.red,
         duration: Duration(seconds: 3),
+      ),
+    );
+  } else if (!isImagen) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(url),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
       ),
     );
   } else if (name.length < 2) {
@@ -40,7 +49,6 @@ void validationProducts(String name, String descripcion, double precio,
       ),
     );
   } else {
-    //Llamada a la API para crear el nuevo producto;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('El nuevo producto se creo con exito'),
@@ -55,5 +63,7 @@ void validationProducts(String name, String descripcion, double precio,
         builder: (context) => const NewProducts(),
       ),
     );
+
+    createProducts(name, descripcion, precio, oferta, url, negocio);
   }
 }

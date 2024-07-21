@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:local_market/Pages/Products/validation_products.dart';
 import 'package:local_market/Services/button.dart';
 import 'package:local_market/Services/nav_bar.dart';
 import 'package:local_market/State/sesion.dart';
@@ -14,24 +13,25 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => StateSesion(),
-      child: const NewProducts(),
+      child: const ProfileEdit(),
     ),
   );
 }
 
-class NewProducts extends StatefulWidget {
-  const NewProducts({super.key});
+class ProfileEdit extends StatefulWidget {
+  const ProfileEdit({super.key});
 
   @override
-  State<NewProducts> createState() => _NewProducts();
+  State<ProfileEdit> createState() => _ProfileEdit();
 }
 
-class _NewProducts extends State<NewProducts> {
+class _ProfileEdit extends State<ProfileEdit> {
   final TextEditingController name = TextEditingController();
-  final TextEditingController precio = TextEditingController();
-  final TextEditingController descripcion = TextEditingController();
-  final TextEditingController oferta = TextEditingController();
-  final TextEditingController imagen = TextEditingController();
+  final TextEditingController correo = TextEditingController();
+  final TextEditingController pass = TextEditingController();
+  final TextEditingController latitude = TextEditingController();
+  final TextEditingController longitude = TextEditingController();
+
   String image = 'null';
   bool isImagen = false;
 
@@ -76,16 +76,24 @@ class _NewProducts extends State<NewProducts> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final user = context.read<StateSesion>();
+      name.text = user.name;
+      correo.text = user.correo;
+      pass.text = user.pass;
+      latitude.text = user.latitude;
+      longitude.text = user.longitude;
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
     name.dispose();
-    precio.dispose();
-    descripcion.dispose();
-    oferta.dispose();
-    imagen.dispose();
+    correo.dispose();
+    pass.dispose();
+    latitude.dispose();
+    longitude.dispose();
   }
 
   @override
@@ -102,31 +110,20 @@ class _NewProducts extends State<NewProducts> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 50),
-                  const Text(
-                    "Agregar nuevo producto",
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 38.0,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                      letterSpacing: 2,
+                  Expanded(
+                    child: ClipOval(
+                      child: image != ''
+                          ? Image.network(image,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(Icons.error_outline),
+                              width: 200,
+                              height: 200,
+                              fit: BoxFit.fill)
+                          : Image.network(user.url,
+                              width: 200, height: 200, fit: BoxFit.fill),
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 25),
-                  ClipOval(
-                    child: image == 'null'
-                        ? Image.network(
-                            '/home/astrochat/Pictures/Screenshots/hola.png',
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.error_outline),
-                            width: 300,
-                            height: 300,
-                            fit: BoxFit.fill)
-                        : Image.network(image,
-                            width: 300, height: 300, fit: BoxFit.fill),
-                  ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () async {
                       html.FileUploadInputElement uploadInput =
@@ -144,19 +141,19 @@ class _NewProducts extends State<NewProducts> {
                         }
                       });
                     },
-                    child: const Text('Cargar imagen'),
+                    child: const Text('Cambiar imagen'),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   CustomField(
                       size: 350,
                       controller: name,
-                      label: "Nombre de producto",
+                      label: "Nombre",
                       icon: const Icon(Icons.payment)),
                   const SizedBox(height: 30),
                   CustomField(
                       size: 350,
-                      controller: descripcion,
-                      label: "Descripcion de producto",
+                      controller: correo,
+                      label: "Correo",
                       icon: const Icon(Icons.book)),
                   const SizedBox(height: 30),
                   SizedBox(
@@ -166,31 +163,29 @@ class _NewProducts extends State<NewProducts> {
                       children: [
                         CustomField(
                             size: 150,
-                            controller: precio,
-                            label: "Precio ",
+                            controller: latitude,
+                            label: "Latitud",
                             icon: const Icon(Icons.book)),
                         CustomField(
                             size: 150,
-                            controller: oferta,
-                            label: "Oferta",
+                            controller: longitude,
+                            label: "Longitud",
                             icon: const Icon(Icons.book)),
                       ],
                     ),
                   ),
+                  const SizedBox(height: 30),
+                  CustomField(
+                      size: 350,
+                      controller: pass,
+                      label: "Contraseña",
+                      icon: const Icon(Icons.book)),
                   const SizedBox(height: 40),
                   SizedBox(
                     width: 350,
                     child: ElevatedButton(
                       onPressed: () {
-                        validationProducts(
-                            name.text,
-                            descripcion.text,
-                            double.parse(precio.text),
-                            oferta.text,
-                            image,
-                            user.idnegocio,
-                            isImagen,
-                            context);
+                        //Update
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFffca7b),
@@ -205,7 +200,7 @@ class _NewProducts extends State<NewProducts> {
                         minimumSize: const Size(150, 50),
                       ),
                       child: const Text(
-                        'Crear producto',
+                        'aActualizar datos',
                         style: TextStyle(
                           color: Colors.white, // Texto blanco
                           fontSize: 27.0,

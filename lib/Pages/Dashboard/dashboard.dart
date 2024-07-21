@@ -283,7 +283,7 @@ class _Dashboard extends State<Dashboard> {
           ),
 
           //----Barra de redirecciones;
-          const Navbar(),
+          Navbar(tipe: user.tipo),
         ],
       ),
     );

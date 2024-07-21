@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_market/Pages/Dashboard/productos_card.dart';
+import 'package:local_market/Pages/Dashboard/profile_card.dart';
 import 'package:local_market/Pages/Products/create_products.dart';
 import 'package:local_market/Services/nav_bar.dart';
 import 'package:local_market/State/sesion.dart';
@@ -26,6 +27,7 @@ class DashboardNegocio extends StatefulWidget {
 class _DashboardNegocio extends State<DashboardNegocio> {
   final TextEditingController _query = TextEditingController();
   List<List<String>> productos = [];
+  int showOption = 2;
 
   @override
   void initState() {
@@ -119,28 +121,44 @@ class _DashboardNegocio extends State<DashboardNegocio> {
                       ),
                     ),
                     const SizedBox(height: 25),
-                    const Row(
+                    Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Options(
-                              name: "Mi negocio",
-                              route: 1,
-                              icon: Icon(Icons.business_sharp)),
-                          Options(
-                              name: "Mis productos",
-                              route: 2,
-                              icon: Icon(Icons.production_quantity_limits)),
-                          Options(
-                              name: "Mis reservas",
-                              route: 3,
-                              icon: Icon(Icons.business_sharp)),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                showOption = 1;
+                              });
+                              debugPrint(showOption.toString());
+                            },
+                            child: const Options(
+                                name: "Mi negocio",
+                                icon: Icon(Icons.business_sharp)),
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  showOption = 2;
+                                });
+                                debugPrint(showOption.toString());
+                              },
+                              child: const Options(
+                                  name: "Mis productos",
+                                  icon:
+                                      Icon(Icons.production_quantity_limits))),
+                          GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  showOption = 3;
+                                });
+                                debugPrint(showOption.toString());
+                              },
+                              child: const Options(
+                                  name: "Mis reservas",
+                                  icon: Icon(Icons.business_sharp))),
                         ]),
                     const SizedBox(height: 20),
-                    ProductsCard(
-                        products: List<List<String>>.from(productos
-                            .where((item) => int.parse(item[2]) == user.id)
-                            .map((item) => List<String>.from(item))),
-                        query: _query)
+                    const ProfileEdit(),
                   ],
                 ),
               ),
@@ -148,7 +166,7 @@ class _DashboardNegocio extends State<DashboardNegocio> {
           ),
 
           //----Barra de redirecciones;
-          const Navbar(),
+          Navbar(tipe: user.tipo),
         ],
       ),
     );
@@ -158,46 +176,26 @@ class _DashboardNegocio extends State<DashboardNegocio> {
 class Options extends StatelessWidget {
   final String name;
   final Icon icon;
-  final int route;
   //final Function function;
 
-  const Options(
-      {super.key, required this.name, required this.icon, required this.route
+  const Options({super.key, required this.name, required this.icon
       //required this.function
       });
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      GestureDetector(
-        onTap: () {
-          switch (route) {
-            case 1:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const NewProducts()));
-              break;
-            case 2:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const NewProducts()));
-              break;
-            case 3:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const NewProducts()));
-              break;
-          }
-        },
-        child: Container(
-            width: 80,
-            height: 80,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                border: Border.all(
-                  color: const Color.fromARGB(255, 40, 125, 223),
-                  width: 1,
-                ),
-                color: const Color.fromARGB(255, 40, 125, 223)),
-            child: icon),
-      ),
+      Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              border: Border.all(
+                color: const Color.fromARGB(255, 40, 125, 223),
+                width: 1,
+              ),
+              color: const Color.fromARGB(255, 40, 125, 223)),
+          child: icon),
       Text(name)
     ]);
   }

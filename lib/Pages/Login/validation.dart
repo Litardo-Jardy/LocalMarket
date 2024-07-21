@@ -24,6 +24,7 @@ void validation(String usert, String pass, context, user) async {
     );
   } else {
     List<String> data = await validationUser(usert, pass);
+
     if (int.parse(data[0]) > 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -32,6 +33,7 @@ void validation(String usert, String pass, context, user) async {
           duration: Duration(seconds: 3),
         ),
       );
+
       user.setId(int.parse(data[0]));
       user.setName(data[1]);
       user.setCorreo(data[2]);
@@ -40,7 +42,8 @@ void validation(String usert, String pass, context, user) async {
       user.setLongitude(data[5]);
       user.setTipo(int.parse(data[6]));
       user.setUrl(data[7]);
-      debugPrint(data[6]);
+      user.setIdnegocio(int.parse(data[8]));
+
       if (int.parse(data[6]) == 3) {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const DashboardNegocio()));
