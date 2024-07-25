@@ -217,7 +217,6 @@ class _ProfileEdit extends State<ProfileEdit> {
 
           //----Barra de redirecciones;
           Navbar(tipe: user.tipo),
-          const SizedBox(height: 30),
         ],
       ),
     );

@@ -96,129 +96,128 @@ class _NewProducts extends State<NewProducts> {
       backgroundColor: const Color.fromRGBO(245, 244, 244, 0.867),
       body: Stack(
         children: [
-          ListView(children: [
-            Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 50),
-                  const Text(
-                    "Agregar nuevo producto",
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 38.0,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                      letterSpacing: 2,
-                    ),
-                    textAlign: TextAlign.center,
+          SingleChildScrollView(
+              child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 50),
+                const Text(
+                  "Agregar nuevo producto",
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 38.0,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                    letterSpacing: 2,
                   ),
-                  const SizedBox(height: 25),
-                  ClipOval(
-                    child: image == 'null'
-                        ? Image.network(
-                            '/home/astrochat/Pictures/Screenshots/hola.png',
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.error_outline),
-                            width: 300,
-                            height: 300,
-                            fit: BoxFit.fill)
-                        : Image.network(image,
-                            width: 300, height: 300, fit: BoxFit.fill),
-                  ),
-                  const SizedBox(height: 8),
-                  ElevatedButton(
-                    onPressed: () async {
-                      html.FileUploadInputElement uploadInput =
-                          html.FileUploadInputElement();
-                      uploadInput.accept = 'image/*';
-                      uploadInput.click();
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 25),
+                ClipOval(
+                  child: image == 'null'
+                      ? Image.network(
+                          '/home/astrochat/Pictures/Screenshots/hola.png',
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.error_outline),
+                          width: 300,
+                          height: 300,
+                          fit: BoxFit.fill)
+                      : Image.network(image,
+                          width: 300, height: 300, fit: BoxFit.fill),
+                ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  onPressed: () async {
+                    html.FileUploadInputElement uploadInput =
+                        html.FileUploadInputElement();
+                    uploadInput.accept = 'image/*';
+                    uploadInput.click();
 
-                      uploadInput.onChange.listen((e) {
-                        final files = uploadInput.files;
-                        if (files!.isNotEmpty) {
-                          setState(() {
-                            _imageFile = files.first;
-                          });
-                          setImage(_imageFile, 'Angelito/', user.id.toString());
-                        }
-                      });
+                    uploadInput.onChange.listen((e) {
+                      final files = uploadInput.files;
+                      if (files!.isNotEmpty) {
+                        setState(() {
+                          _imageFile = files.first;
+                        });
+                        setImage(_imageFile, 'Angelito/', user.id.toString());
+                      }
+                    });
+                  },
+                  child: const Text('Cargar imagen'),
+                ),
+                const SizedBox(height: 30),
+                CustomField(
+                    size: 350,
+                    controller: name,
+                    label: "Nombre de producto",
+                    icon: const Icon(Icons.payment)),
+                const SizedBox(height: 30),
+                CustomField(
+                    size: 350,
+                    controller: descripcion,
+                    label: "Descripcion de producto",
+                    icon: const Icon(Icons.book)),
+                const SizedBox(height: 30),
+                SizedBox(
+                  width: 380,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      CustomField(
+                          size: 150,
+                          controller: precio,
+                          label: "Precio ",
+                          icon: const Icon(Icons.book)),
+                      CustomField(
+                          size: 150,
+                          controller: oferta,
+                          label: "Oferta",
+                          icon: const Icon(Icons.book)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40),
+                SizedBox(
+                  width: 350,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      validationProducts(
+                          name.text,
+                          descripcion.text,
+                          double.parse(precio.text),
+                          oferta.text,
+                          image,
+                          user.idnegocio,
+                          isImagen,
+                          context);
                     },
-                    child: const Text('Cargar imagen'),
-                  ),
-                  const SizedBox(height: 30),
-                  CustomField(
-                      size: 350,
-                      controller: name,
-                      label: "Nombre de producto",
-                      icon: const Icon(Icons.payment)),
-                  const SizedBox(height: 30),
-                  CustomField(
-                      size: 350,
-                      controller: descripcion,
-                      label: "Descripcion de producto",
-                      icon: const Icon(Icons.book)),
-                  const SizedBox(height: 30),
-                  SizedBox(
-                    width: 380,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        CustomField(
-                            size: 150,
-                            controller: precio,
-                            label: "Precio ",
-                            icon: const Icon(Icons.book)),
-                        CustomField(
-                            size: 150,
-                            controller: oferta,
-                            label: "Oferta",
-                            icon: const Icon(Icons.book)),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  SizedBox(
-                    width: 350,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        validationProducts(
-                            name.text,
-                            descripcion.text,
-                            double.parse(precio.text),
-                            oferta.text,
-                            image,
-                            user.idnegocio,
-                            isImagen,
-                            context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFffca7b),
-                        foregroundColor: Colors.black87,
-                        shadowColor: Colors.black,
-                        elevation: 5,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(35),
-                        ),
-                        minimumSize: const Size(150, 50),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFffca7b),
+                      foregroundColor: Colors.black87,
+                      shadowColor: Colors.black,
+                      elevation: 5,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(35),
                       ),
-                      child: const Text(
-                        'Crear producto',
-                        style: TextStyle(
-                          color: Colors.white, // Texto blanco
-                          fontSize: 27.0,
-                          letterSpacing: 2,
-                          fontStyle: FontStyle.normal,
-                        ),
+                      minimumSize: const Size(150, 50),
+                    ),
+                    child: const Text(
+                      'Crear producto',
+                      style: TextStyle(
+                        color: Colors.white, // Texto blanco
+                        fontSize: 27.0,
+                        letterSpacing: 2,
+                        fontStyle: FontStyle.normal,
                       ),
                     ),
                   ),
-                ],
-              ),
-            )
-          ]),
+                ),
+              ],
+            ),
+          )),
 
           //----Barra de redirecciones;
           Navbar(tipe: user.tipo),

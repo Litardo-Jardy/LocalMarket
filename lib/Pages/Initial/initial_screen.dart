@@ -41,7 +41,7 @@ class _InitialScreen extends State<InitialScreen> {
                     fontWeight: FontWeight.bold,
                   )),
               SizedBox(height: 30),
-              CustomButton(route: 3, width: 370, message: 'Iniciar sesion'),
+              CustomButton(route: 3, width: 370, message: 'Iniciar perro'),
             ],
           ),
         ],

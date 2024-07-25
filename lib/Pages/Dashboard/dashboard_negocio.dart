@@ -127,7 +127,11 @@ class _DashboardNegocio extends State<DashboardNegocio> {
                           GestureDetector(
                             onTap: () {
                               setState(() {
-                                showOption = 1;
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ProfileEdit()));
                               });
                               debugPrint(showOption.toString());
                             },
@@ -158,7 +162,11 @@ class _DashboardNegocio extends State<DashboardNegocio> {
                                   icon: Icon(Icons.business_sharp))),
                         ]),
                     const SizedBox(height: 20),
-                    const ProfileEdit(),
+                    ProductsCard(
+                        products: List<List<String>>.from(productos
+                            .where((item) => int.parse(item[2]) == user.id)
+                            .map((item) => List<String>.from(item))),
+                        query: _query)
                   ],
                 ),
               ),
