@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:local_market/Services/button.dart';
 import 'package:local_market/Services/nav_bar.dart';
@@ -13,7 +12,9 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => StateSesion(),
-      child: const ProfileEdit(),
+      child: const MaterialApp(
+        home: ProfileEdit(),
+      ),
     ),
   );
 }
@@ -78,22 +79,24 @@ class _ProfileEdit extends State<ProfileEdit> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final user = context.read<StateSesion>();
-      name.text = user.name;
-      correo.text = user.correo;
-      pass.text = user.pass;
-      latitude.text = user.latitude;
-      longitude.text = user.longitude;
+      setState(() {
+        name.text = user.name ?? '';
+        correo.text = user.correo ?? '';
+        pass.text = user.pass ?? '';
+        latitude.text = user.latitude ?? '';
+        longitude.text = user.longitude ?? '';
+      });
     });
   }
 
   @override
   void dispose() {
-    super.dispose();
     name.dispose();
     correo.dispose();
     pass.dispose();
     latitude.dispose();
     longitude.dispose();
+    super.dispose();
   }
 
   @override
@@ -109,19 +112,41 @@ class _ProfileEdit extends State<ProfileEdit> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 50),
-                  Expanded(
-                    child: ClipOval(
-                      child: image != ''
-                          ? Image.network(image,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.error_outline),
-                              width: 200,
-                              height: 200,
-                              fit: BoxFit.fill)
-                          : Image.network(user.url,
-                              width: 200, height: 200, fit: BoxFit.fill),
+                  const SizedBox(height: 30),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 35.0),
+                      child: Text(
+                        "Informacion del negocio",
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.black,
+                          fontFamily: 'Poppins',
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
                     ),
+                  ),
+                  const SizedBox(height: 30),
+                  ClipOval(
+                    child: (image != 'null' && image.isNotEmpty)
+                        ? Image.network(
+                            image,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.error_outline),
+                            width: 200,
+                            height: 200,
+                            fit: BoxFit.fill,
+                          )
+                        : (user.url != null && user.url!.isNotEmpty)
+                            ? Image.network(
+                                user.url!,
+                                width: 200,
+                                height: 200,
+                                fit: BoxFit.fill,
+                              )
+                            : const Icon(Icons.person, size: 200),
                   ),
                   const SizedBox(height: 10),
                   ElevatedButton(
@@ -200,7 +225,7 @@ class _ProfileEdit extends State<ProfileEdit> {
                         minimumSize: const Size(150, 50),
                       ),
                       child: const Text(
-                        'aActualizar datos',
+                        'Actualizar datos',
                         style: TextStyle(
                           color: Colors.white, // Texto blanco
                           fontSize: 27.0,
