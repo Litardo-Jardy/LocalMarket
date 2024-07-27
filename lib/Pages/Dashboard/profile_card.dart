@@ -32,13 +32,22 @@ class _ProfileEdit extends State<ProfileEdit> {
   final TextEditingController pass = TextEditingController();
   final TextEditingController latitude = TextEditingController();
   final TextEditingController longitude = TextEditingController();
+  final TextEditingController hora = TextEditingController();
+  final TextEditingController dias = TextEditingController();
+  final TextEditingController referencia = TextEditingController();
+  final TextEditingController descripcion = TextEditingController();
+  final TextEditingController categoria = TextEditingController();
 
   String image = 'null';
   bool isImagen = false;
-
   html.File? _imageFile;
 
-  Future<void> setImage(html.File? images, String folder, String id) async {
+  String image_negocio = 'null';
+  bool isImagen_negocio = false;
+  html.File? _imageFileNegocio;
+
+  Future<void> setImage(
+      html.File? images, String folder, String id, Function updateState) async {
     final uri = Uri.parse('http://localhost/SkyLocal/setImage.php');
     var request = http.MultipartRequest('POST', uri);
 
@@ -62,16 +71,28 @@ class _ProfileEdit extends State<ProfileEdit> {
     if (response.statusCode == 200) {
       final data = json.decode(responseData);
       setState(() {
-        isImagen = data['request'][0][0];
-        image = data['request'][0][1];
+        updateState(data['request'][0][0], data['request'][0][1]);
       });
     } else {
       final data = json.decode(responseData);
       setState(() {
-        isImagen = false;
-        image = data['request'][0][1];
+        updateState(false, data['request'][0][1]);
       });
     }
+  }
+
+  void updateStateImage(bool isimage, String images) {
+    setState(() {
+      isImagen = isimage;
+      image = images;
+    });
+  }
+
+  void updateStateImageNegocio(bool isimage, String images) {
+    setState(() {
+      isImagen_negocio = isimage;
+      image_negocio = images;
+    });
   }
 
   @override
@@ -129,6 +150,16 @@ class _ProfileEdit extends State<ProfileEdit> {
                     ),
                   ),
                   const SizedBox(height: 30),
+                  const Text(
+                    "Logo del negocio",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 10),
                   ClipOval(
                     child: (image != 'null' && image.isNotEmpty)
                         ? Image.network(
@@ -162,7 +193,8 @@ class _ProfileEdit extends State<ProfileEdit> {
                           setState(() {
                             _imageFile = files.first;
                           });
-                          setImage(_imageFile, 'Angelito/', user.id.toString());
+                          setImage(_imageFile, 'Angelito/', user.id.toString(),
+                              updateStateImage);
                         }
                       });
                     },
@@ -199,6 +231,88 @@ class _ProfileEdit extends State<ProfileEdit> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 30),
+                  CustomField(
+                      size: 350,
+                      controller: referencia,
+                      label: "Refrencia",
+                      icon: const Icon(Icons.directions)),
+                  const SizedBox(height: 30),
+                  const Text(
+                    "Imagen del negocio",
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.black,
+                      fontFamily: 'Poppins',
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 10),
+                  ClipOval(
+                    child: (image_negocio != 'null' && image_negocio.isNotEmpty)
+                        ? Image.network(
+                            image_negocio,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.error_outline),
+                            width: 200,
+                            height: 200,
+                            fit: BoxFit.fill,
+                          )
+                        : (user.url != null && user.url!.isNotEmpty)
+                            ? Image.network(
+                                user.url!,
+                                width: 200,
+                                height: 200,
+                                fit: BoxFit.fill,
+                              )
+                            : const Icon(Icons.person, size: 200),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () async {
+                      html.FileUploadInputElement uploadInput =
+                          html.FileUploadInputElement();
+                      uploadInput.accept = 'image/*';
+                      uploadInput.click();
+
+                      uploadInput.onChange.listen((e) {
+                        final files = uploadInput.files;
+                        if (files!.isNotEmpty) {
+                          setState(() {
+                            _imageFileNegocio = files.first;
+                          });
+                          setImage(_imageFileNegocio, 'Angelito/',
+                              user.id.toString(), updateStateImageNegocio);
+                        }
+                      });
+                    },
+                    child: const Text('Cambiar imagen'),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: 380,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        CustomField(
+                            size: 150,
+                            controller: dias,
+                            label: "Dias de apertura",
+                            icon: const Icon(Icons.calendar_month)),
+                        CustomField(
+                            size: 150,
+                            controller: hora,
+                            label: "Horas de apertura",
+                            icon: const Icon(Icons.hourglass_top)),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  CustomField(
+                      size: 350,
+                      controller: descripcion,
+                      label: "Descriṕcion",
+                      icon: const Icon(Icons.book)),
                   const SizedBox(height: 30),
                   CustomField(
                       size: 350,
