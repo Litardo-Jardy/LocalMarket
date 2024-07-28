@@ -93,7 +93,7 @@ class _Dashboard extends State<Dashboard> {
   ///
   ///**slongitud**: limite éste de la longitud.
   Future<dynamic> getNegocios(double nlatitud, double slatitud,
-      double nlongitud, double slongitud) async {
+      double nlongitud, double slongitud, int id) async {
     final response = await http.post(
       Uri.parse('http://localhost/API_local_market/getNegocio.php'),
       headers: <String, String>{
@@ -103,9 +103,11 @@ class _Dashboard extends State<Dashboard> {
         'N_latitude': nlatitud.toString(),
         'S_latitude': slatitud.toString(),
         'N_longitude': nlongitud.toString(),
-        'S_longitude': slongitud.toString()
+        'S_longitude': slongitud.toString(),
+        'id': id.toString()
       }),
     );
+
     try {
       final data = json.decode(response.body);
       List<List<String>> newNegocios = List<List<String>>.from(
@@ -134,7 +136,7 @@ class _Dashboard extends State<Dashboard> {
     double longEast = longitude + deltaLong;
     double longWest = longitude - deltaLong;
 
-    getNegocios(latNorth, latSouth, longEast, longWest);
+    getNegocios(latNorth, latSouth, longEast, longWest, 0);
   }
 
   ///Esta funcion sirve para agregar mas elementos a lista de _markers.
@@ -266,7 +268,7 @@ class _Dashboard extends State<Dashboard> {
                     CustomField(
                         size: 350,
                         controller: _query,
-                        label: "Busacr",
+                        label: "Buscar",
                         icon: const Icon(Icons.search)),
 
                     const SizedBox(height: 20),
