@@ -1,6 +1,6 @@
 # local_market
 
-A new Flutter project.
+LocalMarket es un proyecto creado a apartir de una idea de presentacion como proyecto Intregrador de Saberes (PIS) en el Instituto Superior Tecnologigo Babahoyo (ISTB). LocalMarket es un proyecto dedicado tanto a los clientes como a los comercios locales dentro de un area determinada, este proyecto Movil/Web tiene como fin conectar a estas dos entidades para encontrar un benificio mutuo entre ambos, tanto para los comercios locales en forma de tener mas visualizacion en su entorno como para los clientes al poder examinar los negocios locales en busca de sus productos deseados desde una misma ubicacion. LocaMarket intrega recursos de google maps mediante su API, como BackEnd utiliza una api rest desarrollada en php **API_local_market** y como herramienta adicional en modo desarrollo utilza una herramientra extra **SkyLocal**
 
 ## Getting Started
 
