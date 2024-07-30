@@ -54,6 +54,7 @@ class _Loggin extends State<Loggin> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            SizedBox(height: 30),
                             Image(
                                 width: 250,
                                 image: AssetImage('lib/assets/logo.png')),

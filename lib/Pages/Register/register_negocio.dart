@@ -93,7 +93,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                               child: Text(
                                 'Unete como Negocio',
                                 style: TextStyle(
-                                  color: Color(0xFFffca7b),
+                                  color: Color.fromARGB(255, 0, 0, 0),
                                   fontSize: 34,
                                   fontWeight: FontWeight.bold,
                                   fontStyle: FontStyle.italic,
@@ -221,7 +221,6 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                             child: isVisible
                                 ? Column(
                                     children: <Widget>[
-                                      const SizedBox(height: 40.0),
                                       CustomField(
                                           size: 350,
                                           controller: _name,

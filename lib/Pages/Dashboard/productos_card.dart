@@ -34,30 +34,6 @@ class ProductsCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        SizedBox(
-          width: 350,
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const NewProducts()));
-            },
-            style: ElevatedButton.styleFrom(
-              elevation: 5,
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 23),
-              minimumSize: const Size(150, 50),
-            ),
-            child: const Text(
-              "+ Agregar nuevo producto",
-              style: TextStyle(
-                color: Color.fromARGB(221, 112, 221, 69),
-                fontSize: 20,
-                letterSpacing: 1,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 15),
         Wrap(
             spacing: 60,
             runSpacing: 50,

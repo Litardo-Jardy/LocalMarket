@@ -105,15 +105,23 @@ class _NewProducts extends State<NewProducts> {
                 const Text(
                   "Agregar nuevo producto",
                   style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 38.0,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
-                    letterSpacing: 2,
+                    fontSize: 30,
+                    color: Colors.black,
+                    fontFamily: 'Poppins',
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+                const SizedBox(height: 25),
+                const Text(
+                  "Imagen del producto",
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.black,
+                    fontFamily: 'Poppins',
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 10),
                 ClipOval(
                   child: image == 'null'
                       ? Image.network(
@@ -215,13 +223,13 @@ class _NewProducts extends State<NewProducts> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 100)
               ],
             ),
           )),
 
           //----Barra de redirecciones;
           Navbar(tipe: user.tipo),
-          const SizedBox(height: 30),
         ],
       ),
     );

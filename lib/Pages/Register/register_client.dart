@@ -66,7 +66,7 @@ class _RegisterCliente extends State<RegisterCliente> {
                               child: Text(
                                 'Unete como cliente',
                                 style: TextStyle(
-                                  color: Color(0xFFffca7b),
+                                  color: Color.fromARGB(255, 0, 0, 0),
                                   fontSize: 37.5,
                                   fontWeight: FontWeight.bold,
                                   fontStyle: FontStyle.italic,

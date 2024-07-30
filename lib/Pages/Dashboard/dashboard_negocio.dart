@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_market/Pages/Dashboard/productos_card.dart';
-import 'package:local_market/Pages/Dashboard/profile_card.dart';
+import 'package:local_market/Pages/Profile/profile_card_negocio.dart';
 import 'package:local_market/Pages/Products/create_products.dart';
 import 'package:local_market/Services/nav_bar.dart';
 import 'package:local_market/State/sesion.dart';
@@ -133,7 +133,6 @@ class _DashboardNegocio extends State<DashboardNegocio> {
                                         builder: (context) =>
                                             const ProfileEdit()));
                               });
-                              debugPrint(showOption.toString());
                             },
                             child: const Options(
                                 name: "Mi negocio",
@@ -142,12 +141,17 @@ class _DashboardNegocio extends State<DashboardNegocio> {
                           GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  showOption = 2;
+                                  setState(() {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const NewProducts()));
+                                  });
                                 });
-                                debugPrint(showOption.toString());
                               },
                               child: const Options(
-                                  name: "Mis productos",
+                                  name: "Nuevo producto",
                                   icon:
                                       Icon(Icons.production_quantity_limits))),
                           GestureDetector(
@@ -155,7 +159,6 @@ class _DashboardNegocio extends State<DashboardNegocio> {
                                 setState(() {
                                   showOption = 3;
                                 });
-                                debugPrint(showOption.toString());
                               },
                               child: const Options(
                                   name: "Mis reservas",
@@ -166,7 +169,8 @@ class _DashboardNegocio extends State<DashboardNegocio> {
                         products: List<List<String>>.from(productos
                             .where((item) => int.parse(item[2]) == user.id)
                             .map((item) => List<String>.from(item))),
-                        query: _query)
+                        query: _query),
+                    const SizedBox(height: 100)
                   ],
                 ),
               ),

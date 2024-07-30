@@ -277,7 +277,8 @@ class _Dashboard extends State<Dashboard> {
                     Negocioscard(
                       negocios: negocios,
                       productos: productos,
-                    )
+                    ),
+                    const SizedBox(height: 100)
                   ],
                 ),
               ),

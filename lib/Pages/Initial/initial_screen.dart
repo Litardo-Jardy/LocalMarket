@@ -44,6 +44,14 @@ class _InitialScreen extends State<InitialScreen> {
               CustomButton(route: 3, width: 370, message: 'Iniciar sesion'),
             ],
           ),
+          SizedBox(height: 30.0),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Text(
+              '© 2024 AstroChat. Todos los derechos reservados.',
+              style: TextStyle(color: Color.fromARGB(255, 182, 181, 181)),
+            ),
+          ),
         ],
       ),
     );

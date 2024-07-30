@@ -150,126 +150,135 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: const Color.fromARGB(221, 245, 244, 244),
       body: Stack(
         children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        width: 380.0,
-                        child: Text(
-                          "Elige 3 o mas negocios de tu preferencia.",
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 5, 5, 5),
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.normal,
-                            letterSpacing: 2,
-                          ),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      const SizedBox(height: 25),
-                      SizedBox(
-                        width: 380.0,
-                        child: TextField(
-                          controller: _query,
-                          decoration: InputDecoration(
-                            labelText: 'Buscar',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
+          ListView(children: [
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          width: 380.0,
+                          child: Text(
+                            "Elige 3 o mas negocios de tu preferencia.",
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 5, 5, 5),
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.normal,
+                              letterSpacing: 2,
                             ),
-                            prefixIcon: const Icon(Icons.search),
-                          ),
-                          style: const TextStyle(
-                            fontSize: 19.0,
+                            textAlign: TextAlign.start,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 40),
-                      Wrap(
-                        spacing: 60,
-                        runSpacing: 50,
-                        children: _items?.map((e) {
-                              bool isSelected = selects.contains(e[0]);
-                              return GestureDetector(
-                                onTap: () {
-                                  onItemPressed(e[0]);
-                                },
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      width: 80,
-                                      height: 80,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: const Color(0xFFffca7b),
-                                          width: 1,
-                                        ),
-                                        color: isSelected
-                                            ? Colors.green
-                                            : const Color.fromARGB(
-                                                221, 245, 244, 244),
-                                        borderRadius: BorderRadius.circular(50),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.5),
-                                            spreadRadius: 5,
-                                            blurRadius: 7,
-                                            offset: const Offset(0, 3),
+                        const SizedBox(height: 25),
+                        SizedBox(
+                          width: 380.0,
+                          child: TextField(
+                            controller: _query,
+                            decoration: InputDecoration(
+                              labelText: 'Buscar',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              prefixIcon: const Icon(Icons.search),
+                            ),
+                            style: const TextStyle(
+                              fontSize: 19.0,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        SizedBox(
+                          width: 390,
+                          child: Wrap(
+                            spacing: 60,
+                            runSpacing: 50,
+                            children: _items?.map((e) {
+                                  bool isSelected = selects.contains(e[0]);
+                                  return GestureDetector(
+                                    onTap: () {
+                                      onItemPressed(e[0]);
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: const Color(0xFFffca7b),
+                                              width: 1,
+                                            ),
+                                            color: isSelected
+                                                ? Colors.green
+                                                : const Color.fromARGB(
+                                                    221, 245, 244, 244),
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 5,
+                                                blurRadius: 7,
+                                                offset: const Offset(0, 3),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                      child: SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: e[1] != 'null'
-                                              ? Image.network(
-                                                  e[1],
-                                                  errorBuilder: (context, error,
-                                                          stackTrace) =>
-                                                      const Icon(
-                                                          Icons.error_outline),
-                                                )
-                                              : Image.network(
-                                                  'https://img.icons8.com/ios-filled/50/FF8B00/cocktail.png',
-                                                  errorBuilder: (context, error,
-                                                          stackTrace) =>
-                                                      const Icon(
-                                                          Icons.error_outline),
-                                                ),
+                                          child: SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: e[1] != 'null'
+                                                  ? Image.network(
+                                                      e[1],
+                                                      errorBuilder: (context,
+                                                              error,
+                                                              stackTrace) =>
+                                                          const Icon(Icons
+                                                              .error_outline),
+                                                    )
+                                                  : Image.network(
+                                                      'https://img.icons8.com/ios-filled/50/FF8B00/cocktail.png',
+                                                      errorBuilder: (context,
+                                                              error,
+                                                              stackTrace) =>
+                                                          const Icon(Icons
+                                                              .error_outline),
+                                                    ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          e[0],
+                                          style: const TextStyle(
+                                            color: Color.fromARGB(255, 0, 0, 0),
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle: FontStyle.italic,
+                                            letterSpacing: 1.5,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      e[0],
-                                      style: const TextStyle(
-                                        color: Color.fromARGB(255, 0, 0, 0),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.italic,
-                                        letterSpacing: 1.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList() ??
-                            [],
-                      ),
-                    ],
+                                  );
+                                }).toList() ??
+                                [],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ]),
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
