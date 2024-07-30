@@ -33,8 +33,6 @@ class _ProfileEditState extends State<ProfileEditClient> {
   final TextEditingController latitude = TextEditingController();
   final TextEditingController longitude = TextEditingController();
 
-  List<List<String>> negocio = [];
-
   String image = 'null';
   bool isImagen = false;
   html.File? _imageFile;
@@ -123,6 +121,25 @@ class _ProfileEditState extends State<ProfileEditClient> {
         'longitude': longitude.toString()
       }),
     );
+    final responseData = json.decode(response.body);
+    if (responseData['status'] == 'success') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Usuario actualizado con éxito.'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              'Error al actualizar el usuario: ${responseData['message']}'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   @override
@@ -238,6 +255,7 @@ class _ProfileEditState extends State<ProfileEditClient> {
                           ],
                         ),
                       ),
+                      const SizedBox(height: 30),
                       CustomField(
                           size: 350,
                           controller: pass,
@@ -248,14 +266,6 @@ class _ProfileEditState extends State<ProfileEditClient> {
                         width: 350,
                         child: ElevatedButton(
                           onPressed: () async {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                    'Se actualizaron los datos con exito.'),
-                                backgroundColor: Colors.blue,
-                                duration: Duration(seconds: 3),
-                              ),
-                            );
                             await updateUser(
                                 name.text,
                                 correo.text,
@@ -264,6 +274,12 @@ class _ProfileEditState extends State<ProfileEditClient> {
                                 user.id,
                                 longitude.text,
                                 latitude.text);
+                            user.setName(name.text);
+                            user.setCorreo(correo.text);
+                            user.setPass(pass.text);
+                            user.setLatitude(latitude.text);
+                            user.setLongitude(longitude.text);
+                            user.setUrl(image);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

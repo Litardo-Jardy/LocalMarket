@@ -167,7 +167,8 @@ class _DashboardNegocio extends State<DashboardNegocio> {
                     const SizedBox(height: 20),
                     ProductsCard(
                         products: List<List<String>>.from(productos
-                            .where((item) => int.parse(item[2]) == user.id)
+                            .where(
+                                (item) => int.parse(item[2]) == user.idnegocio)
                             .map((item) => List<String>.from(item))),
                         query: _query),
                     const SizedBox(height: 100)
