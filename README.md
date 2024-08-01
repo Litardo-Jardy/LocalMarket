@@ -8,8 +8,8 @@ LocalMarket es un proyecto creado a apartir de una idea de presentacion como pro
 
 ## Índice
 
-- [Instalación](#Instalación)
 - [Recursos](#Recursos)
+- [Instalación](#Instalación)
 - [Uso](#uso)
 - [Autores](#autores)
 
@@ -43,10 +43,21 @@ Clona y configura una herramienta fundamental que permitira guardar los recursos
    ### Crea y configura un archivo config.dart
 
     class Config {
-          static const String apiKey = 'http://localhost API_local_market'; 
-          static const String apiMaps = 'Tu API KEY de google maps';
+          static const String apiKey = 'http://localhost API_local_market';
     } 
 
+   ### Crea un archivo llamado load_google_maps.js dentro de la siguiente ruta
+
+   `web/`
+
+   Una vez creado el archivo coloca la siguiente configuracion dentro:
+
+    const googleMapsApiKey = 'Tu ApiKey  de google maps';
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsApiKey}`;
+    document.head.appendChild(script);
+
+   - [Consigue tu ApiKey de google maps](https://console.cloud.google.com/projectselector2/google/maps-apis/credentials?utm_source=Docs_RestrictAPIKey&utm_content=Docs_maps-backend&_gl=1*n5xz91*_ga*MTk1ODQzNzYzLjE3MjI1MzI3ODI.*_ga_NRWSTWS78N*MTcyMjUzMjc4Ni4xLjEuMTcyMjUzMjc4Ni4wLjAuMA..&pli=1)
 
    ### Actualiza las depencias del proyecto
    Ejecuta en la raiz del proyecto el csiguiente comando:
@@ -63,7 +74,7 @@ Clona y configura una herramienta fundamental que permitira guardar los recursos
 
   ### Principal contribuidor
    #### Programador FrontEnd y BackEnd:
-   - Jardy Litrado [@Jardy](https://github.com/Litardo-Jardy)
+   - Jardy Litardo [@Jardy](https://github.com/Litardo-Jardy)
 
   ### Colaboradores
 
@@ -79,11 +90,11 @@ Clona y configura una herramienta fundamental que permitira guardar los recursos
   - Lester Domingues
   - Omar Araujo
 
-    #### Testing:
-    - Ruben Mora [elbenjack128](https://github.com/elbenjack128)
-    - Jonnathan Alvarez [@jalvarex](https://github.com/jalvarex)
-    - Jardy Litrado [@Jardy](https://github.com/Litardo-Jardy)
+#### Testing:
+- Ruben Mora [elbenjack128](https://github.com/elbenjack128)
+- Jonnathan Alvarez [@jalvarex](https://github.com/jalvarex)
+- Jardy Litrado [@Jardy](https://github.com/Litardo-Jardy)
 
 <p align="center">
-  <img src="lib/assets/Team.png" alt="Foto grupal" width="600" />
+  <img src="lib/assets/Team.jpeg" alt="Foto grupal" width="600" />
 </p>

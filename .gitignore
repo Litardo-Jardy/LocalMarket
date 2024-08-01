@@ -45,3 +45,4 @@ app.*.map.json
 
 #configuraciones
 lib/Services/config.dart
+web/load_google_maps.js
