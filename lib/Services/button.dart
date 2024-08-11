@@ -27,14 +27,19 @@ class CustomField extends StatelessWidget {
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
           labelText: label,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(35),
-          ),
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                color: Colors.black.withOpacity(0.5),
+                width: 2,
+              )),
           prefixIcon: icon,
         ),
         style: const TextStyle(
-          fontSize: 22.0,
+          fontSize: 10.0,
         ),
       ),
     );
