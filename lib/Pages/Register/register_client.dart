@@ -11,6 +11,8 @@ import 'dart:html' as html;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:local_market/Services/registerBar.dart';
+
 void main() {
   runApp(const RegisterCliente());
 }
@@ -95,7 +97,7 @@ class _RegisterCliente extends State<RegisterCliente> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE0E0E0),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: ListView(children: [
         Center(
           child: Column(
@@ -106,6 +108,8 @@ class _RegisterCliente extends State<RegisterCliente> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    const SizedBox(height: 20),
+                    const NavigatorRegister(),
                     const SizedBox(height: 30),
                     ClipOval(
                         child: (image != 'null' && image.isNotEmpty)
@@ -155,31 +159,31 @@ class _RegisterCliente extends State<RegisterCliente> {
                               controller: _name,
                               label: "Nombre y apelllido",
                               icon: const Icon(Icons.person)),
-                          const SizedBox(height: 20.0),
+                          const SizedBox(height: 30.0),
                           CustomField(
                               size: 300,
                               controller: _email,
                               label: "Email",
                               icon: const Icon(Icons.email)),
-                          const SizedBox(height: 20.0),
+                          const SizedBox(height: 30.0),
                           CustomField(
                               size: 300,
                               controller: _location,
                               label: "Ubicacion",
                               icon: const Icon(Icons.location_city)),
-                          const SizedBox(height: 20.0),
+                          const SizedBox(height: 30.0),
                           CustomField(
                               size: 300,
                               controller: _pass,
                               label: "Contraseña",
                               icon: const Icon(Icons.lock)),
-                          const SizedBox(height: 20.0),
+                          const SizedBox(height: 30.0),
                           CustomField(
                               size: 300,
                               controller: _confirPass,
                               label: "Confirmacion de contraseña",
                               icon: const Icon(Icons.lock)),
-                          const SizedBox(height: 20.0),
+                          const SizedBox(height: 30.0),
                           SizedBox(
                             width: 300,
                             child: ElevatedButton(
@@ -215,40 +219,6 @@ class _RegisterCliente extends State<RegisterCliente> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 20.0),
-                          SizedBox(
-                            width: 300,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Loggin()));
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF007ACC),
-                                foregroundColor: Colors.black87,
-                                shadowColor: Colors.black,
-                                elevation: 5,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                minimumSize: const Size(150, 50),
-                              ),
-                              child: const Text(
-                                'Iniciar sesion',
-                                style: TextStyle(
-                                  color: Colors.white, // Texto blanco
-                                  fontSize: 20,
-                                  letterSpacing: 2,
-                                  fontStyle: FontStyle.normal,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 30.0),
                           const Align(
                             alignment: Alignment.topCenter,
                             child: Text(
