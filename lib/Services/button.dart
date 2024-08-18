@@ -23,15 +23,15 @@ class CustomField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 315,
+      width: 290,
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
           filled: true,
-          fillColor: Colors.white,
           labelText: label,
-          border: const UnderlineInputBorder(
-            borderSide: BorderSide(
+          border: UnderlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(
               color: Colors.grey, // Color del borde
               width: 1.0, // Grosor del borde
             ),

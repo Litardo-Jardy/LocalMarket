@@ -4,7 +4,8 @@ import 'package:local_market/Pages/Register/register_client.dart';
 import 'package:local_market/Pages/Register/register_negocio.dart';
 
 class NavigatorRegister extends StatefulWidget {
-  const NavigatorRegister({super.key});
+  final String selectPages;
+  const NavigatorRegister({super.key, required this.selectPages});
 
   @override
   State<NavigatorRegister> createState() => _NavigatorRegisterState();
@@ -12,6 +13,12 @@ class NavigatorRegister extends StatefulWidget {
 
 class _NavigatorRegisterState extends State<NavigatorRegister> {
   String selectPage = "login";
+
+  @override
+  void initState() {
+    super.initState();
+    selectPage = widget.selectPages;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +41,7 @@ class _NavigatorRegisterState extends State<NavigatorRegister> {
                 style: TextStyle(fontSize: 16, letterSpacing: 1.5)),
             icon: Icon(Icons.person)),
         ButtonSegment<String>(
-            value: "Negocio",
+            value: "negocio",
             label: Text('Negocio',
                 style: TextStyle(fontSize: 15.5, letterSpacing: 1.5)),
             icon: Icon(Icons.store)),
@@ -46,7 +53,7 @@ class _NavigatorRegisterState extends State<NavigatorRegister> {
         });
 
         switch (selectPage) {
-          case 'Login':
+          case 'login':
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const Loggin()));
             break;
@@ -56,7 +63,7 @@ class _NavigatorRegisterState extends State<NavigatorRegister> {
                 MaterialPageRoute(
                     builder: (context) => const RegisterCliente()));
             break;
-          case 'Negocio':
+          case 'negocio':
             Navigator.push(
                 context,
                 MaterialPageRoute(

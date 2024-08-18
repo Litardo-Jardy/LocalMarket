@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_market/Pages/Login/validation.dart';
 import 'package:local_market/Services/button.dart';
+import 'package:local_market/Services/registerBar.dart';
 import 'package:provider/provider.dart';
 
 import 'package:local_market/State/sesion.dart';
@@ -49,6 +50,8 @@ class _Loggin extends State<Loggin> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 20),
+                    const NavigatorRegister(selectPages: "login"),
                     const SizedBox(
                       width: 370,
                       child: Column(
