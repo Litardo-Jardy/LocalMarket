@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
 import 'dart:typed_data';
 import 'package:local_market/Pages/Login/login.dart';
 
@@ -98,143 +99,167 @@ class _RegisterCliente extends State<RegisterCliente> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
-      body: ListView(children: [
-        Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 370,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 20),
-                    const NavigatorRegister(),
-                    const SizedBox(height: 30),
-                    ClipOval(
-                        child: (image != 'null' && image.isNotEmpty)
-                            ? Image.network(
-                                image,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    const Icon(Icons.error_outline),
-                                width: 200,
-                                height: 200,
-                                fit: BoxFit.fill,
-                              )
-                            : Image.network(
-                                'https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png',
-                                width: 200,
-                                height: 200,
-                                fit: BoxFit.fill,
-                              )),
-                    const SizedBox(height: 13),
-                    ElevatedButton(
-                      onPressed: () async {
-                        html.FileUploadInputElement uploadInput =
-                            html.FileUploadInputElement();
-                        uploadInput.accept = 'image/*';
-                        uploadInput.click();
-
-                        uploadInput.onChange.listen((e) {
-                          final files = uploadInput.files;
-                          if (files!.isNotEmpty) {
-                            setState(() {
-                              _imageFile = files.first;
-                            });
-                            setImage(_imageFile, 'Angelito/', '1000',
-                                updateStateImage);
-                          }
-                        });
-                      },
-                      child: const Text('Elegir imagen'),
-                    ),
-                    const SizedBox(height: 30.0),
-                    SizedBox(
-                      width: 380,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CustomField(
-                              size: 300,
-                              controller: _name,
-                              label: "Nombre y apelllido",
-                              icon: const Icon(Icons.person)),
-                          const SizedBox(height: 30.0),
-                          CustomField(
-                              size: 300,
-                              controller: _email,
-                              label: "Email",
-                              icon: const Icon(Icons.email)),
-                          const SizedBox(height: 30.0),
-                          CustomField(
-                              size: 300,
-                              controller: _location,
-                              label: "Ubicacion",
-                              icon: const Icon(Icons.location_city)),
-                          const SizedBox(height: 30.0),
-                          CustomField(
-                              size: 300,
-                              controller: _pass,
-                              label: "Contraseña",
-                              icon: const Icon(Icons.lock)),
-                          const SizedBox(height: 30.0),
-                          CustomField(
-                              size: 300,
-                              controller: _confirPass,
-                              label: "Confirmacion de contraseña",
-                              icon: const Icon(Icons.lock)),
-                          const SizedBox(height: 30.0),
-                          SizedBox(
-                            width: 300,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                validationClient(
-                                    _name.text,
-                                    _pass.text,
-                                    _email.text,
-                                    _confirPass.text,
-                                    _location.text,
-                                    context);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFffca7b),
-                                foregroundColor: Colors.black87,
-                                shadowColor: Colors.black,
-                                elevation: 5,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                minimumSize: const Size(150, 50),
-                              ),
-                              child: const Text(
-                                'Crear cuenta',
-                                style: TextStyle(
-                                  color: Colors.white, // Texto blanco
-                                  fontSize: 20,
-                                  letterSpacing: 2,
-                                  fontStyle: FontStyle.normal,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Align(
-                            alignment: Alignment.topCenter,
-                            child: Text(
-                              '© 2024 AstroChat. Todos los derechos reservados.',
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 182, 181, 181)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+      body: Stack(children: [
+        Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                  "lib/assets/gradiant.png"), // Ruta de la imagen en assets
+              fit: BoxFit.cover, // Ajusta la imagen para cubrir todo el fondo
+            ),
           ),
+        ),
+        BackdropFilter(
+          filter: ImageFilter.blur(
+              sigmaX: 2.0, sigmaY: 2.0), // Intensidad del desenfoque
+          child: Container(
+            color: Colors.black.withOpacity(
+                0), // Color transparente para permitir ver la imagen difuminada
+          ),
+        ),
+        ListView(
+          children: [
+            Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 370,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 20),
+                        const NavigatorRegister(selectPages: "cliente"),
+                        const SizedBox(height: 30),
+                        ClipOval(
+                            child: (image != 'null' && image.isNotEmpty)
+                                ? Image.network(
+                                    image,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const Icon(Icons.error_outline),
+                                    width: 200,
+                                    height: 200,
+                                    fit: BoxFit.fill,
+                                  )
+                                : Image.network(
+                                    'https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png',
+                                    width: 200,
+                                    height: 200,
+                                    fit: BoxFit.fill,
+                                  )),
+                        const SizedBox(height: 13),
+                        ElevatedButton(
+                          onPressed: () async {
+                            html.FileUploadInputElement uploadInput =
+                                html.FileUploadInputElement();
+                            uploadInput.accept = 'image/*';
+                            uploadInput.click();
+
+                            uploadInput.onChange.listen((e) {
+                              final files = uploadInput.files;
+                              if (files!.isNotEmpty) {
+                                setState(() {
+                                  _imageFile = files.first;
+                                });
+                                setImage(_imageFile, 'Angelito/', '1000',
+                                    updateStateImage);
+                              }
+                            });
+                          },
+                          child: const Text('Elegir imagen'),
+                        ),
+                        const SizedBox(height: 30.0),
+                        SizedBox(
+                          width: 380,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CustomField(
+                                  size: 300,
+                                  controller: _name,
+                                  label: "Nombre y apelllido",
+                                  icon: const Icon(Icons.person)),
+                              const SizedBox(height: 30.0),
+                              CustomField(
+                                  size: 300,
+                                  controller: _email,
+                                  label: "Email",
+                                  icon: const Icon(Icons.email)),
+                              const SizedBox(height: 30.0),
+                              CustomField(
+                                  size: 300,
+                                  controller: _location,
+                                  label: "Ubicacion",
+                                  icon: const Icon(Icons.location_city)),
+                              const SizedBox(height: 30.0),
+                              CustomField(
+                                  size: 300,
+                                  controller: _pass,
+                                  label: "Contraseña",
+                                  icon: const Icon(Icons.lock)),
+                              const SizedBox(height: 30.0),
+                              CustomField(
+                                  size: 300,
+                                  controller: _confirPass,
+                                  label: "Contraseña",
+                                  icon: const Icon(Icons.lock)),
+                              const SizedBox(height: 40.0),
+                              SizedBox(
+                                width: 290,
+                                child: ElevatedButton(
+                                  onPressed: () async {
+                                    validationClient(
+                                        _name.text,
+                                        _pass.text,
+                                        _email.text,
+                                        _confirPass.text,
+                                        _location.text,
+                                        context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFFffca7b),
+                                    foregroundColor: Colors.black87,
+                                    shadowColor: Colors.black,
+                                    elevation: 5,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 30, vertical: 16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    minimumSize: const Size(150, 50),
+                                  ),
+                                  child: const Text(
+                                    'Crear cuenta',
+                                    style: TextStyle(
+                                      color: Colors.white, // Texto blanco
+                                      fontSize: 20,
+                                      letterSpacing: 2,
+                                      fontStyle: FontStyle.normal,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 30),
+                              const Align(
+                                alignment: Alignment.topCenter,
+                                child: Text(
+                                  '© 2024 AstroChat. Todos los derechos reservados.',
+                                  style: TextStyle(
+                                      color:
+                                          Color.fromARGB(255, 182, 181, 181)),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ]),
     );

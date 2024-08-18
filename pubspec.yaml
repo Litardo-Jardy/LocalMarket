@@ -53,6 +53,9 @@ flutter:
    - lib/assets/logo.png
    - lib/assets/store.jpeg
    - lib/assets/Team.jpeg
+   - lib/assets/localmarketbg.jpg
+   - lib/assets/city.png
+   - lib/assets/gradiant.png
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
