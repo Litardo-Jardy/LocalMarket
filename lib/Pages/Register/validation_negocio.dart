@@ -23,17 +23,8 @@ import 'package:geolocator/geolocator.dart';
 ///**diasApertura**: dias de apertura del negocio.
 ///
 ///**selectedItem**: categoria del negocio.
-void validationNegocio(
-    String name,
-    String email,
-    String pass,
-    String descripcion,
-    String referencia,
-    String horasApertura,
-    String diasApertura,
-    String location,
-    context,
-    selectedItem) {
+bool validationNegocio(String descripcion, String referencia,
+    String horasApertura, String diasApertura, context, selectedItem) {
   if (descripcion.isEmpty ||
       referencia.isEmpty ||
       horasApertura.isEmpty ||
@@ -54,30 +45,16 @@ void validationNegocio(
       ),
     );
   } else {
-    List<String> splitLocation = location.split('|');
-    registerNegocio(
-        name,
-        pass,
-        email,
-        double.parse(splitLocation[0]),
-        double.parse(splitLocation[1]),
-        3,
-        referencia,
-        horasApertura,
-        diasApertura,
-        descripcion,
-        selectedItem);
-
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const Loggin()));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Datos validados con exito'),
+        backgroundColor: Colors.blue,
+        duration: Duration(seconds: 3),
+      ),
+    );
+    return true;
   }
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text('Te uniste con exito'),
-      backgroundColor: Colors.blue,
-      duration: Duration(seconds: 3),
-    ),
-  );
+  return false;
 }
 
 ///Funcion que aplica los filtros en los inputs para las validaciones antes de continuar en la creacion de un negocio
@@ -95,8 +72,18 @@ void validationNegocio(
 ///**context**: contexto actual
 ///
 ///**updateState**: funcion que actualizar el estado de la localizacion en el widget principal
-void validationPersonNegocio(String name, String email, String pass,
-    String confirPass, context, Function updateState) async {
+void validationPersonNegocio(
+  String name,
+  String email,
+  String pass,
+  String confirPass,
+  String descripcion,
+  String referencia,
+  String horasApertura,
+  context,
+  selectedItem,
+  String diasApertura,
+) async {
   bool serviceEnabled;
   LocationPermission permission;
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -157,6 +144,18 @@ void validationPersonNegocio(String name, String email, String pass,
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
-    updateState("${position.latitude}|${position.longitude}");
+    registerNegocio(name, pass, email, position.latitude, position.longitude, 3,
+        referencia, horasApertura, diasApertura, descripcion, selectedItem);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Te uniste con exito'),
+        backgroundColor: Colors.blue,
+        duration: Duration(seconds: 3),
+      ),
+    );
+
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const Loggin()));
   }
 }
