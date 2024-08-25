@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'dart:typed_data';
-import 'package:local_market/Pages/Login/login.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:local_market/Pages/Register/validation_client.dart';
 
 import 'package:local_market/Services/button.dart';
-
-import 'dart:html' as html;
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
+import 'package:local_market/Services/loadImage.dart';
 import 'package:local_market/Services/registerBar.dart';
+import 'package:local_market/Services/textLabel.dart';
 
 void main() {
   runApp(const RegisterCliente());
@@ -33,48 +28,12 @@ class _RegisterCliente extends State<RegisterCliente> {
   final TextEditingController _confirPass = TextEditingController();
   Position? _currentPosition;
 
-  String image = 'null';
+  String image = '';
   bool isImagen = false;
-  html.File? _imageFile;
 
-  Future<void> setImage(
-      html.File? images, String folder, String id, Function updateState) async {
-    final uri = Uri.parse('http://localhost/SkyLocal/setImage.php');
-    var request = http.MultipartRequest('POST', uri);
-
-    request.fields['Folder'] = folder;
-    request.fields['id'] = id;
-
-    var reader = html.FileReader();
-    reader.readAsArrayBuffer(images as html.Blob);
-    await reader.onLoad.first;
-
-    var imageData = reader.result as Uint8List;
-    request.files.add(http.MultipartFile.fromBytes(
-      'Image',
-      imageData,
-      filename: images?.name,
-    ));
-
-    final response = await request.send();
-    final responseData = await response.stream.bytesToString();
-
-    if (response.statusCode == 200) {
-      final data = json.decode(responseData);
-      setState(() {
-        updateState(data['request'][0][0], data['request'][0][1]);
-      });
-    } else {
-      final data = json.decode(responseData);
-      setState(() {
-        updateState(false, data['request'][0][1]);
-      });
-    }
-  }
-
-  void updateStateImage(bool isimage, String images) {
+  void updateStateImage(bool isImage, String images) {
     setState(() {
-      isImagen = isimage;
+      isImagen = isImage;
       image = images;
     });
   }
@@ -131,74 +90,51 @@ class _RegisterCliente extends State<RegisterCliente> {
                         const SizedBox(height: 20),
                         const NavigatorRegister(selectPages: "cliente"),
                         const SizedBox(height: 30),
-                        ClipOval(
-                            child: (image != 'null' && image.isNotEmpty)
-                                ? Image.network(
-                                    image,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            const Icon(Icons.error_outline),
-                                    width: 200,
-                                    height: 200,
-                                    fit: BoxFit.fill,
-                                  )
-                                : Image.network(
-                                    'https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png',
-                                    width: 200,
-                                    height: 200,
-                                    fit: BoxFit.fill,
-                                  )),
-                        const SizedBox(height: 13),
-                        ElevatedButton(
-                          onPressed: () async {
-                            html.FileUploadInputElement uploadInput =
-                                html.FileUploadInputElement();
-                            uploadInput.accept = 'image/*';
-                            uploadInput.click();
-
-                            uploadInput.onChange.listen((e) {
-                              final files = uploadInput.files;
-                              if (files!.isNotEmpty) {
-                                setState(() {
-                                  _imageFile = files.first;
-                                });
-                                setImage(_imageFile, 'Angelito/', '1000',
-                                    updateStateImage);
-                              }
-                            });
-                          },
-                          child: const Text('Elegir imagen'),
-                        ),
+                        const TextLabel(title: "Imagen de perfil"),
+                        const SizedBox(height: 8),
+                        LoadImageWeb(
+                            id: '999992', onChangeImage: updateStateImage),
                         const SizedBox(height: 30.0),
                         SizedBox(
                           width: 380,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                              const TextLabel(title: 'Nombre de usuario'),
+                              const SizedBox(height: 8),
                               CustomField(
                                   size: 300,
                                   controller: _name,
-                                  label: "Nombre y apelllido",
+                                  label: "Nombre",
                                   icon: const Icon(Icons.person)),
                               const SizedBox(height: 30.0),
+                              const TextLabel(title: 'Direccion email'),
+                              const SizedBox(height: 8),
                               CustomField(
                                   size: 300,
                                   controller: _email,
                                   label: "Email",
                                   icon: const Icon(Icons.email)),
                               const SizedBox(height: 30.0),
+                              const TextLabel(title: 'Ubicacion'),
+                              const SizedBox(height: 8),
                               CustomField(
                                   size: 300,
                                   controller: _location,
                                   label: "Ubicacion",
                                   icon: const Icon(Icons.location_city)),
                               const SizedBox(height: 30.0),
+                              const TextLabel(title: 'Contraseña'),
+                              const SizedBox(height: 8),
                               CustomField(
                                   size: 300,
                                   controller: _pass,
                                   label: "Contraseña",
                                   icon: const Icon(Icons.lock)),
                               const SizedBox(height: 30.0),
+                              const TextLabel(
+                                  title: 'Confimacion de contraseña'),
+                              const SizedBox(height: 8),
                               CustomField(
                                   size: 300,
                                   controller: _confirPass,

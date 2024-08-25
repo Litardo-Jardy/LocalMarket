@@ -6,7 +6,10 @@ import 'package:local_market/Pages/Register/api_register_negocio.dart';
 import 'package:local_market/Pages/Register/validation_negocio.dart';
 
 import 'package:local_market/Services/button.dart';
+import 'package:local_market/Services/checkListInput.dart';
+import 'package:local_market/Services/loadImage.dart';
 import 'package:local_market/Services/registerBar.dart';
+import 'package:local_market/Services/textLabel.dart';
 
 void main() {
   runApp(const RegisterNegocio());
@@ -28,12 +31,53 @@ class _RegisterNegocio extends State<RegisterNegocio> {
   final TextEditingController _location = TextEditingController();
   final TextEditingController _referencia = TextEditingController();
   final TextEditingController _horasApertura = TextEditingController();
-  final TextEditingController _diasApertura = TextEditingController();
   final TextEditingController _descripcion = TextEditingController();
   final TextEditingController _confirPass = TextEditingController();
+
+  String diasApertura = '';
   bool isVisible = true;
+
+  String? _apertureHour;
+  String? _closeHour;
   String? _selectedItem;
+
   List<String>? _items;
+  List<String> hours = [
+    "00:00am",
+    "1:00am",
+    "2:00am",
+    "3:00am",
+    "4:00am",
+    "5:00am",
+    "6:00am",
+    "7:00am",
+    "8:00am",
+    "9:00am",
+    "10:00am",
+    "11;00am",
+    "12:00pm",
+    "13:00pm",
+    "14:00pm",
+    "15:00pm",
+    "16:00pm",
+    "17:00pm",
+    "18:00pm",
+    "19:00pm",
+    "20:00pm",
+    "21:00pm",
+    "22:00pm",
+    "23:00pm",
+  ];
+
+  String image = '';
+  bool isImagen = false;
+
+  void updateStateImage(bool isImage, String images) {
+    setState(() {
+      isImagen = isImage;
+      image = images;
+    });
+  }
 
   @override
   void initState() {
@@ -56,6 +100,12 @@ class _RegisterNegocio extends State<RegisterNegocio> {
     });
   }
 
+  void chooseDiasAperura(String options) {
+    setState(() {
+      diasApertura = options;
+    });
+  }
+
   @override
   void dispose() {
     _name.dispose();
@@ -64,7 +114,6 @@ class _RegisterNegocio extends State<RegisterNegocio> {
     _location.dispose();
     _confirPass.dispose();
     _horasApertura.dispose();
-    _diasApertura.dispose();
     _descripcion.dispose();
     _referencia.dispose();
     super.dispose();
@@ -114,11 +163,12 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                               child: isVisible
                                   ? Column(
                                       children: [
+                                        const TextLabel(
+                                            title: "Categoria del negocio"),
                                         SizedBox(
                                           width: 300,
                                           child: DropdownButton<String>(
-                                            hint: const Text(
-                                                'Categoria del negocio'),
+                                            hint: const Text('Categoria'),
                                             value: _selectedItem,
                                             isExpanded: true,
                                             padding: const EdgeInsets.symmetric(
@@ -147,25 +197,104 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                           ),
                                         ),
                                         const SizedBox(height: 30.0),
+                                        const TextLabel(
+                                            title: "Horario del negocio"),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                width: 145,
+                                                child: DropdownButton<String>(
+                                                  hint: const Text('Apetura'),
+                                                  value: _apertureHour,
+                                                  isExpanded: true,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      vertical: 10,
+                                                      horizontal: 10),
+                                                  style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 18),
+                                                  icon: const Icon(
+                                                      Icons.lock_clock,
+                                                      color: Colors.blueAccent),
+                                                  iconSize: 24,
+                                                  elevation: 16,
+                                                  onChanged:
+                                                      (String? newValue) {
+                                                    setState(() {
+                                                      _apertureHour = newValue;
+                                                    });
+                                                  },
+                                                  items: hours.map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: value,
+                                                      child: Text(value),
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              SizedBox(
+                                                width: 145,
+                                                child: DropdownButton<String>(
+                                                  hint: const Text('Cierre'),
+                                                  value: _closeHour,
+                                                  isExpanded: true,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      vertical: 10,
+                                                      horizontal: 10),
+                                                  style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 18),
+                                                  icon: const Icon(
+                                                      Icons.lock_clock,
+                                                      color: Colors.blueAccent),
+                                                  iconSize: 24,
+                                                  elevation: 16,
+                                                  onChanged:
+                                                      (String? newValue) {
+                                                    setState(() {
+                                                      _closeHour = newValue;
+                                                    });
+                                                  },
+                                                  items: hours.map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: value,
+                                                      child: Text(value),
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                              ),
+                                            ]),
+                                        const SizedBox(height: 30.0),
+                                        const TextLabel(
+                                            title: 'Dias de apertura'),
+                                        CheckboxListInput(
+                                            onOptionChage: chooseDiasAperura),
+                                        const SizedBox(height: 30.0),
+                                        const TextLabel(
+                                            title: 'Referencia de ubicacion'),
+                                        const SizedBox(height: 8.0),
                                         CustomField(
                                             size: 350,
                                             controller: _referencia,
                                             label: 'Referencia',
                                             icon: const Icon(Icons.route)),
                                         const SizedBox(height: 30.0),
-                                        CustomField(
-                                            size: 350,
-                                            controller: _horasApertura,
-                                            label: 'Horas de apertura',
-                                            icon: const Icon(Icons.timer)),
-                                        const SizedBox(height: 30.0),
-                                        CustomField(
-                                            size: 350,
-                                            controller: _diasApertura,
-                                            label: 'Dias de apertura',
-                                            icon: const Icon(
-                                                Icons.calendar_view_day)),
-                                        const SizedBox(height: 30.0),
+                                        const TextLabel(
+                                            title: 'Descripcion del negocio'),
+                                        const SizedBox(height: 8.0),
                                         CustomField(
                                             size: 350,
                                             controller: _descripcion,
@@ -179,8 +308,8 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                               bool next = validationNegocio(
                                                   _descripcion.text,
                                                   _referencia.text,
-                                                  _horasApertura.text,
-                                                  _diasApertura.text,
+                                                  '$_apertureHour - $_closeHour',
+                                                  diasApertura,
                                                   context,
                                                   _selectedItem);
                                               if (next) {
@@ -206,7 +335,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                               minimumSize: const Size(150, 50),
                                             ),
                                             child: const Text(
-                                              'Unirte',
+                                              'Suguiente ->',
                                               style: TextStyle(
                                                 color: Colors
                                                     .white, // Texto blanco
@@ -225,37 +354,83 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                               child: !isVisible
                                   ? Column(
                                       children: <Widget>[
+                                        Align(
+                                          alignment: Alignment.bottomLeft,
+                                          child: FloatingActionButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                isVisible = !isVisible;
+                                              });
+                                            },
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                            ),
+                                            backgroundColor: Colors.transparent,
+                                            elevation: 0,
+                                            child: const Text(
+                                              '<- Volver',
+                                              style: TextStyle(
+                                                  color: Colors.black87,
+                                                  fontSize: 30),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 20),
+                                        const TextLabel(
+                                            title: 'Logo/Imagen del negocio'),
+                                        const SizedBox(height: 8),
+                                        LoadImageWeb(
+                                            onChangeImage: updateStateImage,
+                                            id: "999191"),
+                                        const SizedBox(height: 30.0),
+                                        const TextLabel(
+                                            title: 'Nombre del negocio'),
+                                        const SizedBox(height: 8),
                                         CustomField(
                                             size: 350,
                                             controller: _name,
-                                            label: 'Nombre de usuario',
+                                            label: 'Nombre',
                                             icon: const Icon(Icons.person)),
-                                        const SizedBox(height: 50.0),
+                                        const SizedBox(height: 30.0),
+                                        const TextLabel(
+                                            title:
+                                                'Direccion email del negocio'),
+                                        const SizedBox(height: 8),
                                         CustomField(
                                             size: 350,
                                             controller: _email,
                                             label: 'Email',
                                             icon: const Icon(Icons.email)),
-                                        const SizedBox(height: 50.0),
+                                        const SizedBox(height: 30.0),
+                                        const TextLabel(
+                                            title: 'Ubicacion del negocio'),
+                                        const SizedBox(height: 8),
                                         CustomField(
                                             size: 350,
                                             controller: _location,
                                             label: 'Ubicacion',
                                             icon: const Icon(
                                                 Icons.location_city)),
-                                        const SizedBox(height: 50.0),
+                                        const SizedBox(height: 30.0),
+                                        const TextLabel(title: 'Contraseña'),
+                                        const SizedBox(height: 8),
                                         CustomField(
                                             size: 350,
                                             controller: _pass,
                                             label: 'Contraseña',
                                             icon: const Icon(Icons.lock)),
-                                        const SizedBox(height: 50.0),
+                                        const SizedBox(height: 30.0),
+                                        const TextLabel(
+                                            title:
+                                                'Confirmacion de contraseña'),
+                                        const SizedBox(height: 8),
                                         CustomField(
                                             size: 350,
                                             controller: _confirPass,
-                                            label: ' Contraseña',
+                                            label: 'Contraseña',
                                             icon: const Icon(Icons.lock)),
-                                        const SizedBox(height: 50.0),
+                                        const SizedBox(height: 30.0),
                                         SizedBox(
                                           width: 350,
                                           child: ElevatedButton(
@@ -265,8 +440,12 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                                   _email.text,
                                                   _pass.text,
                                                   _confirPass.text,
+                                                  _descripcion.text,
+                                                  _referencia.text,
+                                                  '$_apertureHour - $_closeHour',
+                                                  diasApertura,
                                                   context,
-                                                  updateState);
+                                                  _selectedItem);
                                             },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor:
@@ -285,7 +464,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                               minimumSize: const Size(150, 50),
                                             ),
                                             child: const Text(
-                                              'Siguiente ->',
+                                              'Crear cuenta',
                                               style: TextStyle(
                                                 color: Colors
                                                     .white, // Texto blanco
@@ -299,44 +478,6 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                       ],
                                     )
                                   : null,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 40.0),
-                      SizedBox(
-                        width: 350,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(width: 20.0),
-                            const Text(
-                              '¿Ya tienes cuenta?',
-                              style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                                letterSpacing: 2,
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Loggin()));
-                              },
-                              child: const Text(
-                                'Inicia sesion',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 47, 83, 182),
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                  letterSpacing: 2,
-                                ),
-                              ),
                             ),
                           ],
                         ),

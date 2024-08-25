@@ -45,13 +45,6 @@ bool validationNegocio(String descripcion, String referencia,
       ),
     );
   } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Datos validados con exito'),
-        backgroundColor: Colors.blue,
-        duration: Duration(seconds: 3),
-      ),
-    );
     return true;
   }
   return false;
@@ -73,17 +66,16 @@ bool validationNegocio(String descripcion, String referencia,
 ///
 ///**updateState**: funcion que actualizar el estado de la localizacion en el widget principal
 void validationPersonNegocio(
-  String name,
-  String email,
-  String pass,
-  String confirPass,
-  String descripcion,
-  String referencia,
-  String horasApertura,
-  context,
-  selectedItem,
-  String diasApertura,
-) async {
+    String name,
+    String email,
+    String pass,
+    String confirPass,
+    String descripcion,
+    String referencia,
+    String horasApertura,
+    String diasApertura,
+    context,
+    selectedItem) async {
   bool serviceEnabled;
   LocationPermission permission;
   serviceEnabled = await Geolocator.isLocationServiceEnabled();
