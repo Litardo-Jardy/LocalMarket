@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:local_market/Pages/Register/api_register_client.dart';
 import 'package:local_market/Pages/preferents.dart';
 
@@ -40,7 +41,7 @@ void _registerAndNavigate(String name, String pass, String email,
 ///
 ///**context**: contexto actual
 void validationClient(String name, String pass, String email, String confirPass,
-    String location, context) async {
+    String location, LatLng position, context) async {
   bool serviceEnabled;
 
   LocationPermission permission;
@@ -79,7 +80,6 @@ void validationClient(String name, String pass, String email, String confirPass,
       ),
     );
     //Faltan agregar las condiciones si no existe el correo o el nombre ya en la bd;
-    //Falta la condicion para vereficar el formato de la ubicacion;
   } else if (!serviceEnabled) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -99,10 +99,15 @@ void validationClient(String name, String pass, String email, String confirPass,
         ),
       );
     }
+  } else if (location == "" || location == "null") {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Se deben cargar las cordenadas corretamente'),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+      ),
+    );
   } else {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Te uniste con exito'),

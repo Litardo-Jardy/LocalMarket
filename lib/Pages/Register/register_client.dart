@@ -1,7 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:local_market/Pages/Register/getCoords.dart';
 import 'package:local_market/Pages/Register/validation_client.dart';
 
 import 'package:local_market/Services/button.dart';
@@ -35,6 +40,20 @@ class _RegisterCliente extends State<RegisterCliente> {
     setState(() {
       isImagen = isImage;
       image = images;
+    });
+  }
+
+  Position? position;
+  LocationPermission? permission;
+  bool? serviceEnabled;
+  bool isMapVisible = false;
+  LatLng location = LatLng(0, 0);
+
+  void _onTap(LatLng location) {
+    setState(() {
+      _location.text = "${location.latitude}|${location.longitude}";
+      location = location;
+      isMapVisible = false;
     });
   }
 
@@ -103,7 +122,7 @@ class _RegisterCliente extends State<RegisterCliente> {
                               const TextLabel(title: 'Nombre de usuario'),
                               const SizedBox(height: 8),
                               CustomField(
-                                  size: 300,
+                                  size: 290,
                                   controller: _name,
                                   label: "Nombre",
                                   icon: const Icon(Icons.person)),
@@ -111,23 +130,88 @@ class _RegisterCliente extends State<RegisterCliente> {
                               const TextLabel(title: 'Direccion email'),
                               const SizedBox(height: 8),
                               CustomField(
-                                  size: 300,
+                                  size: 290,
                                   controller: _email,
                                   label: "Email",
                                   icon: const Icon(Icons.email)),
                               const SizedBox(height: 30.0),
                               const TextLabel(title: 'Ubicacion'),
                               const SizedBox(height: 8),
-                              CustomField(
-                                  size: 300,
-                                  controller: _location,
-                                  label: "Ubicacion",
-                                  icon: const Icon(Icons.location_city)),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CustomField(
+                                      size: 188,
+                                      controller: _location,
+                                      label: "(Coordenadas)",
+                                      icon: const Icon(Icons.location_city)),
+                                  const SizedBox(width: 8),
+                                  SizedBox(
+                                    width: 95,
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        serviceEnabled = await Geolocator
+                                            .isLocationServiceEnabled();
+                                        permission =
+                                            await Geolocator.checkPermission();
+
+                                        if (permission ==
+                                            LocationPermission.denied) {
+                                          permission = await Geolocator
+                                              .requestPermission();
+                                          if (permission ==
+                                              LocationPermission.denied) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    'Permisos de ubicacion denegados'),
+                                                backgroundColor: Colors.red,
+                                                duration: Duration(seconds: 3),
+                                              ),
+                                            );
+                                          }
+                                        } else {
+                                          Position newPosition =
+                                              await Geolocator
+                                                  .getCurrentPosition(
+                                                      desiredAccuracy:
+                                                          LocationAccuracy
+                                                              .high);
+
+                                          setState(() {
+                                            isMapVisible = true;
+                                            position = newPosition;
+                                          });
+                                          //_registerAndNavigate(name, pass, email, confirPass,
+                                          //  "${position.latitude}|${position.longitude}", context);
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          backgroundColor:
+                                              const Color(0xFFffca7b)),
+                                      child: const Text(
+                                        'Cargar',
+                                        style: TextStyle(
+                                          color: Colors.white, // Texto blanco
+                                          fontSize: 11,
+                                          letterSpacing: 2,
+                                          fontStyle: FontStyle.normal,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                               const SizedBox(height: 30.0),
                               const TextLabel(title: 'Contraseña'),
                               const SizedBox(height: 8),
                               CustomField(
-                                  size: 300,
+                                  size: 290,
                                   controller: _pass,
                                   label: "Contraseña",
                                   icon: const Icon(Icons.lock)),
@@ -136,7 +220,7 @@ class _RegisterCliente extends State<RegisterCliente> {
                                   title: 'Confimacion de contraseña'),
                               const SizedBox(height: 8),
                               CustomField(
-                                  size: 300,
+                                  size: 290,
                                   controller: _confirPass,
                                   label: "Contraseña",
                                   icon: const Icon(Icons.lock)),
@@ -151,6 +235,7 @@ class _RegisterCliente extends State<RegisterCliente> {
                                         _email.text,
                                         _confirPass.text,
                                         _location.text,
+                                        location,
                                         context);
                                   },
                                   style: ElevatedButton.styleFrom(
@@ -197,6 +282,16 @@ class _RegisterCliente extends State<RegisterCliente> {
             ),
           ],
         ),
+        SizedBox(
+          child: isMapVisible
+              ? GetCoords(
+
+                  /// height: double.infinity,
+                  latitude: position!.latitude,
+                  onTapMaps: _onTap,
+                  longitude: position!.longitude)
+              : null,
+        )
       ]),
     );
   }

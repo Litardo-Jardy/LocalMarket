@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui';
-import 'package:local_market/Pages/Login/login.dart';
 import 'package:local_market/Pages/Register/api_register_negocio.dart';
 
-import 'package:local_market/Pages/Register/validation_negocio.dart';
+import 'package:geolocator/geolocator.dart';
 
+import 'package:local_market/Pages/Register/validation_negocio.dart';
+import 'package:local_market/Pages/Register/getCoords.dart';
 import 'package:local_market/Services/button.dart';
 import 'package:local_market/Services/checkListInput.dart';
 import 'package:local_market/Services/loadImage.dart';
+import 'package:local_market/Services/loadMultipleImage.dart';
 import 'package:local_market/Services/registerBar.dart';
 import 'package:local_market/Services/textLabel.dart';
 
@@ -40,6 +43,13 @@ class _RegisterNegocio extends State<RegisterNegocio> {
   String? _apertureHour;
   String? _closeHour;
   String? _selectedItem;
+
+  List<String> multipleIMages = [];
+  void onAddImage(String url) {
+    setState(() {
+      multipleIMages.add(url);
+    });
+  }
 
   List<String>? _items;
   List<String> hours = [
@@ -76,6 +86,20 @@ class _RegisterNegocio extends State<RegisterNegocio> {
     setState(() {
       isImagen = isImage;
       image = images;
+    });
+  }
+
+  Position? position;
+  LocationPermission? permission;
+  bool? serviceEnabled;
+  bool isMapVisible = false;
+  LatLng location = LatLng(0, 0);
+
+  void _onTap(LatLng location) {
+    setState(() {
+      _location.text = "${location.latitude}|${location.longitude}";
+      location = location;
+      isMapVisible = false;
     });
   }
 
@@ -198,6 +222,13 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                         ),
                                         const SizedBox(height: 30.0),
                                         const TextLabel(
+                                            title: 'Imagenes del negocio'),
+                                        const SizedBox(height: 8),
+                                        LoadMultipleImageWeb(
+                                            onChangeImage: onAddImage,
+                                            id: '896883'),
+                                        const SizedBox(height: 30.0),
+                                        const TextLabel(
                                             title: "Horario del negocio"),
                                         Row(
                                             mainAxisAlignment:
@@ -287,7 +318,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                             title: 'Referencia de ubicacion'),
                                         const SizedBox(height: 8.0),
                                         CustomField(
-                                            size: 350,
+                                            size: 290,
                                             controller: _referencia,
                                             label: 'Referencia',
                                             icon: const Icon(Icons.route)),
@@ -296,7 +327,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                             title: 'Descripcion del negocio'),
                                         const SizedBox(height: 8.0),
                                         CustomField(
-                                            size: 350,
+                                            size: 290,
                                             controller: _descripcion,
                                             label: 'Descripcion',
                                             icon: const Icon(Icons.wordpress)),
@@ -310,6 +341,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                                   _referencia.text,
                                                   '$_apertureHour - $_closeHour',
                                                   diasApertura,
+                                                  multipleIMages,
                                                   context,
                                                   _selectedItem);
                                               if (next) {
@@ -388,7 +420,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                             title: 'Nombre del negocio'),
                                         const SizedBox(height: 8),
                                         CustomField(
-                                            size: 350,
+                                            size: 290,
                                             controller: _name,
                                             label: 'Nombre',
                                             icon: const Icon(Icons.person)),
@@ -398,7 +430,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                                 'Direccion email del negocio'),
                                         const SizedBox(height: 8),
                                         CustomField(
-                                            size: 350,
+                                            size: 290,
                                             controller: _email,
                                             label: 'Email',
                                             icon: const Icon(Icons.email)),
@@ -406,17 +438,90 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                         const TextLabel(
                                             title: 'Ubicacion del negocio'),
                                         const SizedBox(height: 8),
-                                        CustomField(
-                                            size: 350,
-                                            controller: _location,
-                                            label: 'Ubicacion',
-                                            icon: const Icon(
-                                                Icons.location_city)),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            CustomField(
+                                                size: 188,
+                                                controller: _location,
+                                                label: "(Coordenadas)",
+                                                icon: const Icon(
+                                                    Icons.location_city)),
+                                            const SizedBox(width: 8),
+                                            SizedBox(
+                                              width: 95,
+                                              child: ElevatedButton(
+                                                onPressed: () async {
+                                                  serviceEnabled = await Geolocator
+                                                      .isLocationServiceEnabled();
+                                                  permission = await Geolocator
+                                                      .checkPermission();
+
+                                                  if (permission ==
+                                                      LocationPermission
+                                                          .denied) {
+                                                    permission = await Geolocator
+                                                        .requestPermission();
+                                                    if (permission ==
+                                                        LocationPermission
+                                                            .denied) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        const SnackBar(
+                                                          content: Text(
+                                                              'Permisos de ubicacion denegados'),
+                                                          backgroundColor:
+                                                              Colors.red,
+                                                          duration: Duration(
+                                                              seconds: 3),
+                                                        ),
+                                                      );
+                                                    }
+                                                  } else {
+                                                    Position newPosition =
+                                                        await Geolocator
+                                                            .getCurrentPosition(
+                                                                desiredAccuracy:
+                                                                    LocationAccuracy
+                                                                        .high);
+
+                                                    setState(() {
+                                                      isMapVisible = true;
+                                                      position = newPosition;
+                                                    });
+                                                  }
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                    backgroundColor:
+                                                        const Color(
+                                                            0xFFffca7b)),
+                                                child: const Text(
+                                                  'Cargar',
+                                                  style: TextStyle(
+                                                    color: Colors
+                                                        .white, // Texto blanco
+                                                    fontSize: 11,
+                                                    letterSpacing: 2,
+                                                    fontStyle: FontStyle.normal,
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                         const SizedBox(height: 30.0),
                                         const TextLabel(title: 'Contraseña'),
                                         const SizedBox(height: 8),
                                         CustomField(
-                                            size: 350,
+                                            size: 290,
                                             controller: _pass,
                                             label: 'Contraseña',
                                             icon: const Icon(Icons.lock)),
@@ -426,13 +531,13 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                                 'Confirmacion de contraseña'),
                                         const SizedBox(height: 8),
                                         CustomField(
-                                            size: 350,
+                                            size: 290,
                                             controller: _confirPass,
                                             label: 'Contraseña',
                                             icon: const Icon(Icons.lock)),
                                         const SizedBox(height: 30.0),
                                         SizedBox(
-                                          width: 350,
+                                          width: 290,
                                           child: ElevatedButton(
                                             onPressed: () async {
                                               validationPersonNegocio(
@@ -444,6 +549,9 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                                   _referencia.text,
                                                   '$_apertureHour - $_closeHour',
                                                   diasApertura,
+                                                  location,
+                                                  _location.text,
+                                                  multipleIMages,
                                                   context,
                                                   _selectedItem);
                                             },
@@ -498,6 +606,14 @@ class _RegisterNegocio extends State<RegisterNegocio> {
             ),
           ],
         ),
+        SizedBox(
+          child: isMapVisible
+              ? GetCoords(
+                  latitude: position!.latitude,
+                  onTapMaps: _onTap,
+                  longitude: position!.longitude)
+              : null,
+        )
       ]),
     );
   }

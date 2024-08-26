@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:local_market/Services/config.dart';
 
-Future<dynamic> registerNegocio(
+Future<int> registerNegocio(
     String name,
     String pass,
     String email,
@@ -15,7 +15,7 @@ Future<dynamic> registerNegocio(
     String diasApertura,
     String descripcion,
     String? categoria) async {
-  await http.post(
+  final response = await http.post(
     Uri.parse('${Config.apiKey}/registerNegocio.php'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -34,6 +34,12 @@ Future<dynamic> registerNegocio(
       'categoria': categoria
     }),
   );
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    return data['id'];
+  } else {
+    throw Exception('Error en la petición: ${response.statusCode}');
+  }
 }
 
 Future<void> categorys(Function updateCategorys) async {

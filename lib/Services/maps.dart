@@ -7,6 +7,10 @@ class Maps extends StatelessWidget {
   final Set<Marker> markers;
   final onMapCreated;
 
+  final double height;
+
+  final onTapMap;
+
   ///Esta funcion renderiza un mapa usando la API de google maps.
   ///
   ///**latitude**: hace referencia al valor de latitude para el marker inicial.
@@ -20,19 +24,22 @@ class Maps extends StatelessWidget {
       {super.key,
       required this.latitude,
       required this.longitude,
+      required this.height,
       required this.onMapCreated,
+      this.onTapMap,
       required this.markers});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 330,
+      height: height,
       child: GoogleMap(
         onMapCreated: onMapCreated,
         initialCameraPosition: CameraPosition(
           target: LatLng(latitude, longitude),
-          zoom: 15,
+          zoom: 13,
         ),
+        onTap: onTapMap,
         markers: markers,
         myLocationEnabled: true,
         myLocationButtonEnabled: true,

@@ -261,6 +261,7 @@ class _Dashboard extends State<Dashboard> {
                         latitude: double.parse(user.latitude),
                         longitude: double.parse(user.longitude),
                         onMapCreated: _onMapCreated,
+                        height: 330,
                         markers: _markers),
 
                     const SizedBox(height: 20),
