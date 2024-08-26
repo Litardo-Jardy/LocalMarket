@@ -55,7 +55,7 @@ class CustomButton extends StatelessWidget {
           elevation: 5,
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 23),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(35),
+            borderRadius: BorderRadius.circular(15),
           ),
           minimumSize: const Size(150, 50),
         ),
@@ -63,8 +63,8 @@ class CustomButton extends StatelessWidget {
           message,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 25.0,
-            letterSpacing: 1,
+            fontSize: 20.0,
+            letterSpacing: 1.5,
             fontStyle: FontStyle.italic,
           ),
         ),

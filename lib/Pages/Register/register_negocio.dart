@@ -95,10 +95,10 @@ class _RegisterNegocio extends State<RegisterNegocio> {
   bool isMapVisible = false;
   LatLng location = LatLng(0, 0);
 
-  void _onTap(LatLng location) {
+  void _onTap(LatLng locations) {
     setState(() {
-      _location.text = "${location.latitude}|${location.longitude}";
-      location = location;
+      _location.text = "${locations.latitude}|${locations.longitude}";
+      location = locations;
       isMapVisible = false;
     });
   }
@@ -226,7 +226,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                         const SizedBox(height: 8),
                                         LoadMultipleImageWeb(
                                             onChangeImage: onAddImage,
-                                            id: '896883'),
+                                            id: '8956783'),
                                         const SizedBox(height: 30.0),
                                         const TextLabel(
                                             title: "Horario del negocio"),
@@ -333,7 +333,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                             icon: const Icon(Icons.wordpress)),
                                         const SizedBox(height: 30.0),
                                         SizedBox(
-                                          width: 350,
+                                          width: 290,
                                           child: ElevatedButton(
                                             onPressed: () {
                                               bool next = validationNegocio(
@@ -362,7 +362,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                                       vertical: 16),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(35),
+                                                    BorderRadius.circular(8),
                                               ),
                                               minimumSize: const Size(150, 50),
                                             ),
@@ -371,7 +371,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                               style: TextStyle(
                                                 color: Colors
                                                     .white, // Texto blanco
-                                                fontSize: 27.0,
+                                                fontSize: 20.0,
                                                 letterSpacing: 2,
                                                 fontStyle: FontStyle.normal,
                                               ),
@@ -567,7 +567,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                                       vertical: 16),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(35),
+                                                    BorderRadius.circular(8),
                                               ),
                                               minimumSize: const Size(150, 50),
                                             ),
@@ -576,7 +576,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                               style: TextStyle(
                                                 color: Colors
                                                     .white, // Texto blanco
-                                                fontSize: 27.0,
+                                                fontSize: 20.0,
                                                 letterSpacing: 2,
                                                 fontStyle: FontStyle.normal,
                                               ),

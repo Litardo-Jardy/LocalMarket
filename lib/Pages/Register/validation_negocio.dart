@@ -50,7 +50,7 @@ bool validationNegocio(
         duration: Duration(seconds: 3),
       ),
     );
-  } else if (images.length < 3) {
+  } else if (images.length < 2) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Se deben cargar minimo tres images del negocio'),
@@ -135,7 +135,7 @@ void validationPersonNegocio(
     );
     //Faltan agregar las condiciones si no existe el correo o el nombre ya en la bd;
   } else {
-    int id_negocio = await registerNegocio(
+    int idNegocio = await registerNegocio(
         name,
         pass,
         email,
@@ -149,7 +149,7 @@ void validationPersonNegocio(
         selectedItem);
 
     for (var i = 0; i < images.length - 1; i++) {
-      //Colocar query para ingresar imagenes;
+      addImage(idNegocio, images[i]);
     }
 
     ScaffoldMessenger.of(context).showSnackBar(

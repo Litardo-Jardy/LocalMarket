@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:local_market/Services/config.dart';
 
+//Registro de negocio general;
 Future<int> registerNegocio(
     String name,
     String pass,
@@ -42,6 +43,16 @@ Future<int> registerNegocio(
   }
 }
 
+//Añadiendo images a una tabla aparte relacionada con negocio;
+Future<dynamic> addImage(int id, String url) async {
+  await http.post(Uri.parse('${Config.apiKey}/addImage.php'),
+      headers: <String, String>{
+        'Content-Type': 'aplication/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String?, String?>{'id': id.toString(), 'url': url}));
+}
+
+//Listado de categorias para la creacion de nogocios y las preferencias;
 Future<void> categorys(Function updateCategorys) async {
   try {
     final response =

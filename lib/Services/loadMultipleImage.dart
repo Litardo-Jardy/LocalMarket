@@ -68,7 +68,7 @@ class _loadImageWeb extends State<LoadMultipleImageWeb> {
     setState(() {
       multipleImage.add(image);
     });
-    widget.onChangeImage(multipleImage);
+    widget.onChangeImage(image);
   }
 
   @override
