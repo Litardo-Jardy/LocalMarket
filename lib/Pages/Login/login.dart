@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_market/Pages/Login/validation.dart';
 import 'package:local_market/Services/button.dart';
+import 'package:local_market/Services/footer.dart';
 import 'package:local_market/Services/registerBar.dart';
 import 'dart:ui';
 
@@ -185,15 +186,7 @@ class _Loggin extends State<Loggin> {
                                 ),
                               ),
                               const SizedBox(height: 30.0),
-                              const Align(
-                                alignment: Alignment.topCenter,
-                                child: Text(
-                                  '© 2024 AstroChat. Todos los derechos reservados.',
-                                  style: TextStyle(
-                                      color:
-                                          Color.fromARGB(255, 182, 181, 181)),
-                                ),
-                              ),
+                              const CustomFooter()
                             ],
                           ),
                         ),

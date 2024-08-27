@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:local_market/Pages/Initial/redirection.dart';
 import 'dart:ui';
 
+import 'package:local_market/Services/footer.dart';
+
 void main() {
   runApp(const InitialScreen());
 }
@@ -66,13 +68,7 @@ class _InitialScreen extends State<InitialScreen> {
                 ],
               ),
               SizedBox(height: 30.0),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Text(
-                  '© 2024 AstroChat. Todos los derechos reservados.',
-                  style: TextStyle(color: Color.fromARGB(255, 182, 181, 181)),
-                ),
-              ),
+              CustomFooter()
             ],
           ),
         ]));

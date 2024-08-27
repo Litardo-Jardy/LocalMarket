@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'dart:async';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,6 +7,7 @@ import 'package:local_market/Pages/Register/getCoords.dart';
 import 'package:local_market/Pages/Register/validation_client.dart';
 
 import 'package:local_market/Services/button.dart';
+import 'package:local_market/Services/footer.dart';
 import 'package:local_market/Services/loadImage.dart';
 import 'package:local_market/Services/registerBar.dart';
 import 'package:local_market/Services/textLabel.dart';
@@ -108,6 +106,20 @@ class _RegisterCliente extends State<RegisterCliente> {
                       children: [
                         const SizedBox(height: 20),
                         const NavigatorRegister(selectPages: "cliente"),
+                        const SizedBox(height: 30),
+                        const Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                            'Registro de cliente',
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                        ),
                         const SizedBox(height: 30),
                         const TextLabel(title: "Imagen de perfil"),
                         const SizedBox(height: 8),
@@ -262,15 +274,7 @@ class _RegisterCliente extends State<RegisterCliente> {
                                 ),
                               ),
                               const SizedBox(height: 30),
-                              const Align(
-                                alignment: Alignment.topCenter,
-                                child: Text(
-                                  '© 2024 AstroChat. Todos los derechos reservados.',
-                                  style: TextStyle(
-                                      color:
-                                          Color.fromARGB(255, 182, 181, 181)),
-                                ),
-                              ),
+                              const CustomFooter()
                             ],
                           ),
                         ),

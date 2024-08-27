@@ -9,6 +9,7 @@ import 'package:local_market/Pages/Register/validation_negocio.dart';
 import 'package:local_market/Pages/Register/getCoords.dart';
 import 'package:local_market/Services/button.dart';
 import 'package:local_market/Services/checkListInput.dart';
+import 'package:local_market/Services/footer.dart';
 import 'package:local_market/Services/loadImage.dart';
 import 'package:local_market/Services/loadMultipleImage.dart';
 import 'package:local_market/Services/registerBar.dart';
@@ -177,7 +178,25 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                     children: [
                       const SizedBox(height: 20),
                       const NavigatorRegister(selectPages: "negocio"),
-                      const SizedBox(height: 30.0),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      const Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Text(
+                          'Registro de negocio',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                            letterSpacing: 2,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
                       SizedBox(
                         width: 380,
                         child: Column(
@@ -187,6 +206,15 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                               child: isVisible
                                   ? Column(
                                       children: [
+                                        const TextLabel(
+                                            title: 'Descripcion del negocio'),
+                                        const SizedBox(height: 8.0),
+                                        CustomField(
+                                            size: 290,
+                                            controller: _descripcion,
+                                            label: 'Descripcion',
+                                            icon: const Icon(Icons.wordpress)),
+                                        const SizedBox(height: 30.0),
                                         const TextLabel(
                                             title: "Categoria del negocio"),
                                         SizedBox(
@@ -204,6 +232,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                                 Icons.arrow_drop_down,
                                                 color: Colors.blueAccent),
                                             iconSize: 24,
+                                            dropdownColor: Colors.grey,
                                             elevation: 16,
                                             onChanged: (String? newValue) {
                                               setState(() {
@@ -322,15 +351,6 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                                             controller: _referencia,
                                             label: 'Referencia',
                                             icon: const Icon(Icons.route)),
-                                        const SizedBox(height: 30.0),
-                                        const TextLabel(
-                                            title: 'Descripcion del negocio'),
-                                        const SizedBox(height: 8.0),
-                                        CustomField(
-                                            size: 290,
-                                            controller: _descripcion,
-                                            label: 'Descripcion',
-                                            icon: const Icon(Icons.wordpress)),
                                         const SizedBox(height: 30.0),
                                         SizedBox(
                                           width: 290,
@@ -591,14 +611,7 @@ class _RegisterNegocio extends State<RegisterNegocio> {
                         ),
                       ),
                       const SizedBox(height: 30.0),
-                      const Align(
-                        alignment: Alignment.topCenter,
-                        child: Text(
-                          '© 2024 AstroChat. Todos los derechos reservados.',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 182, 181, 181)),
-                        ),
-                      ),
+                      const CustomFooter()
                     ],
                   ),
                 ),
